@@ -1,0 +1,64 @@
+{
+  "id": "farmacia_a2",
+  "title": "En la farmacia",
+  "level": "A2",
+  "estimated_minutes": 10,
+  "setting": "Du har varit förkyld i några dagar och behöver något mot huvudvärk och hosta. Ett litet apotek på en sidogata i Granada.",
+  "tutor_role": "apotekare",
+  "opening_line": "Buenas. ¿Qué necesita?",
+  "success_criteria": [
+    "Eleven beskriver minst två symptom",
+    "Eleven använder 'doler' korrekt (me duele/me duelen)",
+    "Eleven förstår och accepterar/avböjer en rekommendation"
+  ],
+  "target_items": [
+    {
+      "ref": "grammar:doler_construction_a2",
+      "note": "Doler fungerar som gustar: 'me duele la cabeza' (huvudet gör ont mig), 'me duelen los oídos' (öronen gör ont)"
+    },
+    {
+      "ref": "vocab:health_symptoms_a2",
+      "lemmas": [
+        "dolor de cabeza",
+        "tos",
+        "fiebre",
+        "garganta",
+        "resfriado",
+        "alergia"
+      ]
+    },
+    {
+      "ref": "vocab:medicine_a2",
+      "lemmas": ["pastillas", "jarabe", "receta", "ibuprofeno", "paracetamol"]
+    },
+    {
+      "ref": "pattern:expressing_need_a2",
+      "examples": [
+        "Necesito algo para ...",
+        "¿Tiene algo contra ...?",
+        "¿Es con receta?"
+      ]
+    }
+  ],
+  "branches": [
+    {
+      "when": "eleven beskriver ett symptom",
+      "barista_followups": [
+        "¿Desde cuándo?",
+        "¿Toma alguna medicación?",
+        "¿Tiene alergias?"
+      ]
+    },
+    {
+      "when": "eleven använder ser/estar fel om sjukdom",
+      "barista_followups": [
+        "*(coach-paus i kursiv: 'estoy enfermo' — estar för tillfälligt tillstånd, inte ser)*"
+      ]
+    }
+  ],
+  "exit_signals": [
+    "eleven har valt en behandling och frågat priset eller hur ofta",
+    "eleven tackar och säger 'adiós'"
+  ],
+  "notes_for_tutor": "Var lugn och professionell. Använd 'usted'-form ('necesita', inte 'necesitas'). Doler är A2-tröskelkoncept — om eleven säger 'tengo dolor de cabeza' istället för 'me duele la cabeza' är båda OK, men nudga mjukt mot doler-konstruktionen i ditt nästa yttrande. Om eleven uppenbart vill ha receptbelagt läkemedel, säg 'eso es con receta — ¿tiene una?'."
+}

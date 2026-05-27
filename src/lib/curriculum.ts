@@ -21,6 +21,9 @@ import familiaA1 from '../../curriculum/scenarios/familia_a1.json?raw';
 import horaA1 from '../../curriculum/scenarios/hora_a1.json?raw';
 import restauranteA2 from '../../curriculum/scenarios/restaurante_a2.json?raw';
 import planesA2 from '../../curriculum/scenarios/planes_a2.json?raw';
+import hobbiesA1 from '../../curriculum/scenarios/hobbies_a1.json?raw';
+import escuelaA1 from '../../curriculum/scenarios/escuela_a1.json?raw';
+import farmaciaA2 from '../../curriculum/scenarios/farmacia_a2.json?raw';
 import writingMiDiaA1 from '../../curriculum/scenarios/writing_mi_dia_a1.json?raw';
 import writingMiCiudadA2 from '../../curriculum/scenarios/writing_mi_ciudad_a2.json?raw';
 import writingFinSemanaA2 from '../../curriculum/scenarios/writing_fin_semana_a2.json?raw';
@@ -34,8 +37,11 @@ const SCENARIOS: Record<string, Scenario> = (() => {
     comprasA1,
     familiaA1,
     horaA1,
+    hobbiesA1,
+    escuelaA1,
     restauranteA2,
     planesA2,
+    farmaciaA2,
     writingMiDiaA1,
     writingMiCiudadA2,
     writingFinSemanaA2

@@ -1,0 +1,63 @@
+{
+  "id": "hobbies_a1",
+  "title": "¿Qué te gusta hacer?",
+  "level": "A1",
+  "estimated_minutes": 8,
+  "setting": "En kort konversation med en spansktalande klasskompis under en rast. Ni har precis börjat lära känna varandra och pratar om vad ni gillar att göra.",
+  "tutor_role": "klasskompis (Pablo)",
+  "opening_line": "Bueno, ¿y a ti qué te gusta hacer en tu tiempo libre?",
+  "success_criteria": [
+    "Eleven använder gustar-konstruktionen korrekt minst två gånger",
+    "Eleven nämner minst en aktivitet med infinitiv ('me gusta leer')",
+    "Eleven ställer en motfråga"
+  ],
+  "target_items": [
+    {
+      "ref": "grammar:gustar_constructions_a1",
+      "note": "Me gusta + sg/infinitiv; me gustan + pl. INTE 'yo gusto'."
+    },
+    {
+      "ref": "vocab:hobbies_a1",
+      "lemmas": [
+        "leer",
+        "escuchar música",
+        "ver películas",
+        "jugar al fútbol",
+        "dibujar",
+        "cocinar",
+        "viajar"
+      ]
+    },
+    {
+      "ref": "pattern:asking_back_a1",
+      "examples": ["¿Y tú?", "¿A ti también?", "¿Qué tipo de ...?"]
+    }
+  ],
+  "stretch_items": [
+    {
+      "ref": "grammar:gustar_emphatic_a2",
+      "trigger": "om eleven använder 'a mí' för betoning"
+    }
+  ],
+  "branches": [
+    {
+      "when": "eleven nämner en aktivitet",
+      "barista_followups": [
+        "¡Qué bien! ¿Y desde cuándo?",
+        "¿Con quién normalmente?",
+        "¿Cuál es tu favorito?"
+      ]
+    },
+    {
+      "when": "eleven säger 'yo gusto'",
+      "barista_followups": [
+        "*(coach-paus i kursiv: kom ihåg — 'me gusta', inte 'yo gusto'. Försök igen?)*"
+      ]
+    }
+  ],
+  "exit_signals": [
+    "ni har bytt minst 4 turns",
+    "ni har hittat något gemensamt eller en olikhet att skratta åt"
+  ],
+  "notes_for_tutor": "Var avslappnad, kompis-tonläge. Det här är A1, så gustar-konstruktionen är the lesson. Om eleven säger 'yo gusto' eller 'me gusta los libros' (utan -n i plural) — bryt kort i kursiv och be om reformulering. Du själv kan dela något om dig ('a mí me gusta dibujar') för att modellera mönstret naturligt."
+}

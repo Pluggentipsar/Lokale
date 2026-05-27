@@ -19,6 +19,8 @@ import presenteRegular from '../../curriculum/grammar/presente_regular.md?raw';
 import gustar from '../../curriculum/grammar/gustar.md?raw';
 import futuroProximo from '../../curriculum/grammar/futuro_proximo.md?raw';
 import numerosHora from '../../curriculum/grammar/numeros_hora.md?raw';
+import preteritoBasico from '../../curriculum/grammar/preterito_basico.md?raw';
+import verbosReflexivos from '../../curriculum/grammar/verbos_reflexivos.md?raw';
 
 interface Source {
   path: string;
@@ -31,7 +33,9 @@ const SOURCES: Source[] = [
   { path: 'grammar/presente_regular.md', content: presenteRegular },
   { path: 'grammar/gustar.md', content: gustar },
   { path: 'grammar/futuro_proximo.md', content: futuroProximo },
-  { path: 'grammar/numeros_hora.md', content: numerosHora }
+  { path: 'grammar/numeros_hora.md', content: numerosHora },
+  { path: 'grammar/preterito_basico.md', content: preteritoBasico },
+  { path: 'grammar/verbos_reflexivos.md', content: verbosReflexivos }
 ];
 
 let _db: Database | null = null;

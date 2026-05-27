@@ -1,0 +1,66 @@
+{
+  "id": "escuela_a1",
+  "title": "Mi instituto",
+  "level": "A1",
+  "estimated_minutes": 9,
+  "setting": "Du beskriver din skola för en spansktalande utbyteselev som ska börja hos er nästa vecka. Hon vill veta hur det fungerar.",
+  "tutor_role": "utbyteselev (Carmen)",
+  "opening_line": "Oye, cuéntame — ¿cómo es tu instituto?",
+  "success_criteria": [
+    "Eleven beskriver minst två ämnen de läser",
+    "Eleven använder klockslag för minst en tid (när skolan börjar/slutar)",
+    "Eleven använder 'tener' i presens (tengo, tienes) om antalet timmar/lektioner"
+  ],
+  "target_items": [
+    {
+      "ref": "vocab:school_subjects_a1",
+      "lemmas": [
+        "matemáticas",
+        "español",
+        "inglés",
+        "historia",
+        "ciencias",
+        "educación física",
+        "arte",
+        "música"
+      ]
+    },
+    {
+      "ref": "grammar:tener_present_a1",
+      "note": "tener är oregelbundet: tengo, tienes, tiene, tenemos, tenéis, tienen"
+    },
+    {
+      "ref": "vocab:school_life_a1",
+      "lemmas": ["instituto", "clase", "profesor", "profesora", "recreo", "horario"]
+    },
+    {
+      "ref": "pattern:describing_routine_a1",
+      "examples": [
+        "Empiezo a las ocho",
+        "Tengo cinco clases por día",
+        "Mi profesor favorito es ..."
+      ]
+    }
+  ],
+  "branches": [
+    {
+      "when": "eleven nämner ett ämne",
+      "barista_followups": [
+        "¿Te gusta?",
+        "¿Quién te lo da?",
+        "¿Es difícil?"
+      ]
+    },
+    {
+      "when": "eleven använder 'tener' fel",
+      "barista_followups": [
+        "*(coach-paus i kursiv: tener är oregelbundet — 'tengo' i första person, inte 'teno'. Försök igen.)*"
+      ]
+    }
+  ],
+  "exit_signals": [
+    "Carmen har fått en god bild av schemat",
+    "ni har bytt minst 5 turns"
+  ],
+  "notes_for_tutor": "Var nyfiken — Carmen ska faktiskt börja på samma skola, så hon har konkreta frågor. Acceptera felskattningar av klockslag (svenska elever blandar 24h och 12h). Tener-böjningen är en vanlig snubbeltråd — coacha mjukt."
+}
