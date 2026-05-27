@@ -20,10 +20,17 @@
   let input = $state('');
   let scrollEl: HTMLDivElement;
 
+  // Filtrera bort eventuellt META-block ur strömmen så användaren inte ser
+  // <<META>>... växa fram. extractMeta sker fortfarande på full raw text.
+  const displayPending = $derived.by(() => {
+    const idx = pendingTutorText.indexOf('<<META>>');
+    return idx === -1 ? pendingTutorText : pendingTutorText.slice(0, idx).trimEnd();
+  });
+
   // Auto-scroll till botten när det kommer nya turns eller streaming-text.
   $effect(() => {
     void turns.length;
-    void pendingTutorText;
+    void displayPending;
     if (scrollEl) {
       scrollEl.scrollTop = scrollEl.scrollHeight;
     }
@@ -50,8 +57,8 @@
     {#each turns as turn, i (i)}
       <ChatTurn {turn} />
     {/each}
-    {#if isStreaming && pendingTutorText}
-      <ChatTurn turn={{ speaker: 'tutor', text: pendingTutorText }} streaming />
+    {#if isStreaming && displayPending}
+      <ChatTurn turn={{ speaker: 'tutor', text: displayPending }} streaming />
     {/if}
   </div>
 

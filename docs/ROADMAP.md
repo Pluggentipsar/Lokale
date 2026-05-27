@@ -62,7 +62,8 @@ hjälper Piper-rösten eller distraherar den?*
 - [x] Curriculum-chunkning + indexering (brute-force cosine, ej sqlite-vec)
 - [x] Top-K-retrieval injiceras i prompten som REFERENS-block
 - [x] Idempotent index-bygge (hash-baserad change detection)
-- [ ] 10+ scenarion (A1 + A2) — har 3, behöver 7 till
+- [x] 8 scenarion (6 A1 + 2 A2): café, presentation, vägbeskrivning,
+      marknad, familj, klockslag, restaurang, helgplaner
 - [ ] Meningsrekonstruktion som aktivitetstyp
 - [ ] Fri skrivning med 1–2-fels-feedback
 

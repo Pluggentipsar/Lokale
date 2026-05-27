@@ -16,10 +16,25 @@ import type { Scenario } from '$lib/types';
 import cafeA1 from '../../curriculum/scenarios/cafe_a1.json?raw';
 import presentacionA1 from '../../curriculum/scenarios/presentacion_a1.json?raw';
 import direccionesA1 from '../../curriculum/scenarios/direcciones_a1.json?raw';
+import comprasA1 from '../../curriculum/scenarios/compras_a1.json?raw';
+import familiaA1 from '../../curriculum/scenarios/familia_a1.json?raw';
+import horaA1 from '../../curriculum/scenarios/hora_a1.json?raw';
+import restauranteA2 from '../../curriculum/scenarios/restaurante_a2.json?raw';
+import planesA2 from '../../curriculum/scenarios/planes_a2.json?raw';
 
 const SCENARIOS: Record<string, Scenario> = (() => {
   const parsed: Record<string, Scenario> = {};
-  for (const raw of [cafeA1, presentacionA1, direccionesA1]) {
+  const raws = [
+    cafeA1,
+    presentacionA1,
+    direccionesA1,
+    comprasA1,
+    familiaA1,
+    horaA1,
+    restauranteA2,
+    planesA2
+  ];
+  for (const raw of raws) {
     const s = JSON.parse(raw) as Scenario;
     parsed[s.id] = s;
   }

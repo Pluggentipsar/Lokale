@@ -1,0 +1,81 @@
+{
+  "id": "restaurante_a2",
+  "title": "Cena en un restaurante",
+  "level": "A2",
+  "estimated_minutes": 12,
+  "setting": "En medelmått restaurang i Barcelona på kvällen. Du och en kompis ska beställa middag. Servitören kommer fram med menyn.",
+  "tutor_role": "servitör",
+  "opening_line": "Buenas noches. ¿Han elegido ya o necesitan unos minutos?",
+  "success_criteria": [
+    "Eleven beställer både första och andra rätt (primer plato, segundo plato)",
+    "Eleven använder pronomenobjekt minst en gång (lo/la/los/las eller me/te)",
+    "Eleven använder kondicionalen 'me gustaría' eller imperfekt 'quería' artigt"
+  ],
+  "target_items": [
+    {
+      "ref": "pattern:polite_ordering_a2",
+      "examples": [
+        "Me gustaría ...",
+        "Quería ...",
+        "¿Me puede traer ...?",
+        "Para mí, ..."
+      ]
+    },
+    {
+      "ref": "vocab:restaurant_a2",
+      "lemmas": [
+        "carta",
+        "primer plato",
+        "segundo plato",
+        "postre",
+        "cuenta",
+        "agua con gas",
+        "agua sin gas"
+      ]
+    },
+    {
+      "ref": "vocab:food_basics_a2",
+      "lemmas": [
+        "pollo",
+        "pescado",
+        "ensalada",
+        "sopa",
+        "pan",
+        "queso",
+        "vegetariano"
+      ]
+    },
+    {
+      "ref": "grammar:object_pronouns_a2",
+      "note": "lo/la/los/las för direkt objekt; placeras före verbet eller efter infinitiv ('lo quiero' / 'puedo pedirlo')"
+    }
+  ],
+  "stretch_items": [
+    {
+      "ref": "grammar:conditional_polite_b1",
+      "trigger": "om eleven använder 'podría' eller 'sería posible'"
+    }
+  ],
+  "branches": [
+    {
+      "when": "eleven frågar om en specifik rätt",
+      "barista_followups": [
+        "Sí, lleva pollo y verduras.",
+        "Es una especialidad de la casa.",
+        "¿Es alérgico a algo?"
+      ]
+    },
+    {
+      "when": "eleven beställer utan att ange första/andra rätt",
+      "barista_followups": [
+        "¿Y de segundo?",
+        "¿Algo para empezar?"
+      ]
+    }
+  ],
+  "exit_signals": [
+    "eleven har beställt minst två rätter + dryck",
+    "eleven frågar efter notan ('la cuenta')"
+  ],
+  "notes_for_tutor": "Var professionell och artig. Servitör-spanska är aningen formellt — använd usted-form ('ha elegido', inte 'has elegido'). Detta är A2, så coacha objektpronomen mjukt: om eleven säger 'quiero el pollo' istället för 'lo quiero' — ge bägge formerna i ditt svar utan att tjata. Det är ett klassiskt fel som tar tid att internalisera."
+}

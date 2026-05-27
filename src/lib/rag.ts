@@ -16,6 +16,9 @@ import { embed, embedOne, cosine, EMBED_MODEL } from '$lib/api/embed';
 import serEstar from '../../curriculum/grammar/ser_estar.md?raw';
 import articulos from '../../curriculum/grammar/articulos.md?raw';
 import presenteRegular from '../../curriculum/grammar/presente_regular.md?raw';
+import gustar from '../../curriculum/grammar/gustar.md?raw';
+import futuroProximo from '../../curriculum/grammar/futuro_proximo.md?raw';
+import numerosHora from '../../curriculum/grammar/numeros_hora.md?raw';
 
 interface Source {
   path: string;
@@ -25,7 +28,10 @@ interface Source {
 const SOURCES: Source[] = [
   { path: 'grammar/ser_estar.md', content: serEstar },
   { path: 'grammar/articulos.md', content: articulos },
-  { path: 'grammar/presente_regular.md', content: presenteRegular }
+  { path: 'grammar/presente_regular.md', content: presenteRegular },
+  { path: 'grammar/gustar.md', content: gustar },
+  { path: 'grammar/futuro_proximo.md', content: futuroProximo },
+  { path: 'grammar/numeros_hora.md', content: numerosHora }
 ];
 
 let _db: Database | null = null;

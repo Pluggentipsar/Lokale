@@ -1,0 +1,75 @@
+{
+  "id": "planes_a2",
+  "title": "Planes para el fin de semana",
+  "level": "A2",
+  "estimated_minutes": 10,
+  "setting": "Du och en vän i Madrid chattar på fredag eftermiddag om vad ni ska göra under helgen. Ni har inte bestämt något än.",
+  "tutor_role": "kompis (Marta)",
+  "opening_line": "Oye, ¿qué quieres hacer este fin de semana?",
+  "success_criteria": [
+    "Eleven använder 'ir a + infinitiv' för framtidsplaner",
+    "Eleven föreslår minst en aktivitet och accepterar/avböjer minst en",
+    "Eleven uttrycker preferens (me gusta, prefiero)"
+  ],
+  "target_items": [
+    {
+      "ref": "grammar:ir_a_infinitive_a2",
+      "note": "ir + a + infinitiv = nära framtid: 'voy a estudiar', 'vamos a salir'"
+    },
+    {
+      "ref": "grammar:gustar_constructions_a2",
+      "note": "me gusta + singular/infinitiv; me gustan + plural. INTE 'yo gusto'"
+    },
+    {
+      "ref": "vocab:free_time_a2",
+      "lemmas": [
+        "cine",
+        "playa",
+        "museo",
+        "concierto",
+        "partido",
+        "fiesta",
+        "tapas"
+      ]
+    },
+    {
+      "ref": "pattern:proposing_a2",
+      "examples": [
+        "¿Te apetece ...?",
+        "¿Por qué no ...?",
+        "Podemos ...",
+        "Vamos a ..."
+      ]
+    },
+    {
+      "ref": "pattern:accept_decline_a2",
+      "examples": [
+        "Vale, perfecto",
+        "Mejor otro día",
+        "No me apetece mucho",
+        "Suena bien"
+      ]
+    }
+  ],
+  "branches": [
+    {
+      "when": "eleven föreslår en aktivitet",
+      "barista_followups": [
+        "¿A qué hora?",
+        "¿Quién más viene?",
+        "Vale, ¿y después?"
+      ]
+    },
+    {
+      "when": "eleven säger 'me gusto' eller 'yo gusto'",
+      "barista_followups": [
+        "*(coach-paus: 'me gusta' — på spanska är det 'det behagar mig', inte 'jag tycker om')*"
+      ]
+    }
+  ],
+  "exit_signals": [
+    "ni har skissat på minst två konkreta planer med tid",
+    "naturlig avslutning ('vale, ¡nos vemos!')"
+  ],
+  "notes_for_tutor": "Det här är en kompis-konversation — använd tú-form, var avslappnad, släng in en eller två kollokvialismer ('mola', 'vale'). Om eleven använder 'voy estudiar' utan 'a' — korrigera mjukt i ditt nästa yttrande. Gustar-konstruktionen är ett klassiskt fel som svenskar gör — om de säger 'yo gusto' bryt karaktären *kort* i kursiv för en enradig påminnelse."
+}

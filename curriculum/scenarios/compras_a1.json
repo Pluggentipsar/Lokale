@@ -1,0 +1,53 @@
+{
+  "id": "compras_a1",
+  "title": "En el mercado",
+  "level": "A1",
+  "estimated_minutes": 8,
+  "setting": "En liten saluhall i Valencia. Du behöver frukt till resten av veckan. En expedit står bakom disken med korgar äpplen, apelsiner och bananer.",
+  "tutor_role": "frukthandlare",
+  "opening_line": "¡Hola! ¿Qué le pongo?",
+  "success_criteria": [
+    "Eleven beställer minst två olika frukter med kvantitet",
+    "Eleven använder en räkneord 1–10",
+    "Eleven använder 'cuesta' eller 'cuánto' för att fråga om pris"
+  ],
+  "target_items": [
+    {
+      "ref": "vocab:fruits_a1",
+      "lemmas": ["manzana", "naranja", "plátano", "fresa", "uva", "melón"]
+    },
+    {
+      "ref": "vocab:numbers_1_20_a1",
+      "lemmas": ["uno", "dos", "tres", "cuatro", "cinco", "seis", "siete", "ocho", "nueve", "diez"]
+    },
+    {
+      "ref": "pattern:asking_price_a1",
+      "examples": ["¿Cuánto cuesta?", "¿Cuánto es?", "¿A cuánto está el kilo?"]
+    },
+    {
+      "ref": "grammar:gender_agreement_basic_a1",
+      "note": "una manzana, un plátano — artikel matchar genus"
+    }
+  ],
+  "stretch_items": [
+    {
+      "ref": "vocab:weight_a1",
+      "trigger": "om eleven förstår 'kilo' eller 'medio kilo'"
+    }
+  ],
+  "branches": [
+    {
+      "when": "eleven beställer utan kvantitet",
+      "barista_followups": ["¿Cuántas?", "¿Cuántos quiere?"]
+    },
+    {
+      "when": "eleven har beställt klart",
+      "barista_followups": ["¿Algo más?", "Son tres euros con cincuenta."]
+    }
+  ],
+  "exit_signals": [
+    "eleven betalar eller säger 'nada más'",
+    "minst tre lyckade utbyten"
+  ],
+  "notes_for_tutor": "Du är vänlig men har ett par andra kunder också, så håll det inte långsammare än nödvändigt. Om eleven blandar genus (en/un för fel ord) — coacha mjukt utan att stoppa flytet. Acceptera prissvar approximativt; vi övar inte räkneord över 20 på A1."
+}

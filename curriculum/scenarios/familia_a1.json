@@ -1,0 +1,43 @@
+{
+  "id": "familia_a1",
+  "title": "Mi familia",
+  "level": "A1",
+  "estimated_minutes": 9,
+  "setting": "Du och en spansk klasskompis sitter i en park och visar bilder från era familjer på telefonerna.",
+  "tutor_role": "klasskompis (Diego)",
+  "opening_line": "Mira, esta es mi familia. ¿Y la tuya?",
+  "success_criteria": [
+    "Eleven introducerar minst två familjemedlemmar med relation + namn",
+    "Eleven använder possessivt pronomen (mi/mis) korrekt",
+    "Eleven beskriver minst en familjemedlem med ett adjektiv (alto, simpático, etc.)"
+  ],
+  "target_items": [
+    {
+      "ref": "vocab:family_basic_a1",
+      "lemmas": ["madre", "padre", "hermano", "hermana", "abuelo", "abuela", "tío", "tía", "primo", "prima"]
+    },
+    {
+      "ref": "grammar:possessives_a1",
+      "note": "mi/mis (min/mina), tu/tus (din/dina), su/sus — singular vs plural matchar substantiv, inte ägare"
+    },
+    {
+      "ref": "vocab:descriptive_adjectives_a1",
+      "lemmas": ["alto", "bajo", "simpático", "serio", "joven", "mayor"]
+    },
+    {
+      "ref": "grammar:ser_for_description_a1",
+      "note": "ser används för varaktiga egenskaper: 'Mi hermano es alto'"
+    }
+  ],
+  "branches": [
+    {
+      "when": "eleven nämner en familjemedlem",
+      "barista_followups": ["¿Cómo se llama?", "¿Y cuántos años tiene?", "¿Cómo es?"]
+    }
+  ],
+  "exit_signals": [
+    "eleven har presenterat minst tre personer",
+    "Diego eller eleven byter ämne"
+  ],
+  "notes_for_tutor": "Var personlig och nyfiken. Dela själv lite om din egen 'familj' (hitta på något enkelt och konsekvent — t.ex. 'tengo dos hermanas') så att eleven hör mönstren. Om eleven blandar mi/mis (svenska har samma form för båda) — peka bara mjukt: 'tienes dos perros, entonces son tus perros'."
+}

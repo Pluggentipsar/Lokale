@@ -1,0 +1,52 @@
+{
+  "id": "hora_a1",
+  "title": "¿A qué hora?",
+  "level": "A1",
+  "estimated_minutes": 7,
+  "setting": "Du planerar veckan med en spansk utbyteselev som ska gå på olika aktiviteter med dig. Ni kollar ett schema tillsammans.",
+  "tutor_role": "utbyteselev (Lucía)",
+  "opening_line": "Bueno, ¿a qué hora empezamos mañana?",
+  "success_criteria": [
+    "Eleven anger minst två klockslag korrekt (es la una / son las dos)",
+    "Eleven använder en veckodag",
+    "Eleven förstår och bekräftar en föreslagen tid"
+  ],
+  "target_items": [
+    {
+      "ref": "grammar:telling_time_a1",
+      "note": "es la una vs son las... — singular bara för 'una'; använd y/menos för kvart/halvtimme"
+    },
+    {
+      "ref": "vocab:weekdays_a1",
+      "lemmas": ["lunes", "martes", "miércoles", "jueves", "viernes", "sábado", "domingo"]
+    },
+    {
+      "ref": "vocab:time_words_a1",
+      "lemmas": ["mañana", "tarde", "noche", "hoy", "ayer"]
+    },
+    {
+      "ref": "pattern:scheduling_a1",
+      "examples": ["¿A qué hora ...?", "A las ocho de la mañana", "El lunes por la tarde"]
+    }
+  ],
+  "branches": [
+    {
+      "when": "eleven anger en tid",
+      "barista_followups": [
+        "¿De la mañana o de la tarde?",
+        "Vale, perfecto. ¿Y el martes?"
+      ]
+    },
+    {
+      "when": "eleven blandar singular/plural för 'es/son las'",
+      "barista_followups": [
+        "*(coach-paus i kursiv: vi säger 'son las cinco' men 'es la una' — den enda singular-tiden)*"
+      ]
+    }
+  ],
+  "exit_signals": [
+    "ni har bestämt två aktiviteter med tid",
+    "naturlig avslutning"
+  ],
+  "notes_for_tutor": "Håll det lekfullt. Använd gärna 24-timmars som spanjorer ofta gör i officiella sammanhang ('las dieciocho') om eleven verkar redo — annars håll dig till 12-timmars + 'de la tarde/noche'. Acceptera felräkning på minuter — fokus är hela timmar."
+}
