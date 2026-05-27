@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { ensureProfile, updateProfile, wipeAllData } from '$lib/db';
+  import { getModelName, setModelName } from '$lib/state.svelte';
   import {
     loadVoiceSettings,
     saveVoiceSettings,
@@ -18,6 +19,7 @@
   let voice = $state<VoiceSettings>(loadVoiceSettings());
   let voiceAvail = $state<VoiceAvailability>({ whisper: false, piper: false });
   let speakAlong = $state(localStorage?.getItem('lokale.speak_along') === '1');
+  let modelName = $state(getModelName());
 
   onMount(async () => {
     const p = await ensureProfile();
@@ -33,6 +35,7 @@
     e.preventDefault();
     await updateProfile({ displayName, l1, targetLevel });
     saveVoiceSettings(voice);
+    setModelName(modelName.trim() || 'gemma3:4b');
     localStorage.setItem('lokale.speak_along', speakAlong ? '1' : '0');
     saved = true;
     setTimeout(() => (saved = false), 2000);
@@ -101,6 +104,35 @@
             <option value="A2">A2 — grundläggande</option>
             <option value="B1">B1 — självständig</option>
           </select>
+        </div>
+      </section>
+
+      <section class="space-y-5">
+        <h3 class="font-serif text-lg">Modell</h3>
+        <p class="text-sm text-(--color-muted)">
+          Ollama-modellen som driver tutorn. Behöver vara pullad lokalt
+          (<code>ollama pull &lt;namn&gt;</code>) innan du byter.
+        </p>
+        <div>
+          <label for="model" class="block text-sm font-medium mb-2">Modellnamn</label>
+          <input
+            id="model"
+            type="text"
+            bind:value={modelName}
+            list="model-suggestions"
+            placeholder="gemma3:4b"
+            class="w-full px-4 py-3 rounded-xl border border-(--color-muted)/30 bg-(--color-bg) font-mono text-sm"
+          />
+          <datalist id="model-suggestions">
+            <option value="gemma3:4b">Gemma 3 4B (default, balanserad)</option>
+            <option value="gemma3:1b">Gemma 3 1B (snabb, kanske för liten för spanska)</option>
+            <option value="qwen2.5:3b">Qwen 2.5 3B (snabb, bra på flera språk)</option>
+            <option value="qwen2.5:7b">Qwen 2.5 7B (bättre, långsammare)</option>
+            <option value="llama3.2:3b">Llama 3.2 3B</option>
+          </datalist>
+          <p class="text-xs text-(--color-muted) mt-1">
+            Ändringen gäller från nästa session.
+          </p>
         </div>
       </section>
 

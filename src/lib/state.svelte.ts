@@ -6,7 +6,21 @@ import type { OllamaStatus, SessionContext, Turn } from '$lib/types';
 
 export type Phase = 'init' | 'pick' | 'open' | 'chat' | 'close' | 'done';
 
-export const MODEL_NAME = 'gemma3:4b';
+const MODEL_KEY = 'lokale.model_name';
+const DEFAULT_MODEL = 'gemma3:4b';
+
+export function getModelName(): string {
+  if (typeof localStorage === 'undefined') return DEFAULT_MODEL;
+  return localStorage.getItem(MODEL_KEY) || DEFAULT_MODEL;
+}
+
+export function setModelName(name: string): void {
+  if (typeof localStorage === 'undefined') return;
+  localStorage.setItem(MODEL_KEY, name);
+}
+
+/** @deprecated Använd getModelName() — modellnamnet kan ändras i runtime. */
+export const MODEL_NAME = DEFAULT_MODEL;
 
 function createState() {
   let phase = $state<Phase>('init');

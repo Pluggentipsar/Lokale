@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import type { ItemWithState, Scenario, Turn } from '$lib/types';
-  import { app, MODEL_NAME } from '$lib/state.svelte';
+  import { app, getModelName } from '$lib/state.svelte';
   import { checkOllama, chatStream, extractMeta, type ChatMessage } from '$lib/api/ollama';
   import {
     buildSystemPrompt,
@@ -51,7 +51,7 @@
   let indexProgress = $state<{ current: number; total: number } | null>(null);
 
   async function runOllamaCheck() {
-    app.ollama = await checkOllama(MODEL_NAME);
+    app.ollama = await checkOllama(getModelName());
     if (app.ollama.ok) {
       app.phase = 'pick';
       // Kick off curriculum-indexering i bakgrunden. Första sessionen
@@ -110,7 +110,7 @@
       scenarioId: currentScenario.id,
       goal,
       selfRating,
-      modelName: MODEL_NAME
+      modelName: getModelName()
     });
     app.session = {
       sessionId,
@@ -210,7 +210,7 @@
     let raw = '';
     try {
       raw = await chatStream({
-        model: MODEL_NAME,
+        model: getModelName(),
         messages,
         onToken: (delta) => {
           app.pendingTutorText += delta;
@@ -277,7 +277,7 @@
     const prompt = buildClosingReflectionPrompt(transcriptFor(app.session.turns), profile.l1);
     try {
       const q = await chatStream({
-        model: MODEL_NAME,
+        model: getModelName(),
         messages: [{ role: 'user', content: prompt }],
         temperature: 0.4,
         onToken: () => {}
@@ -300,7 +300,7 @@
     const notePrompt = buildSessionNotePrompt(transcriptFor(session.turns), session.goal);
     try {
       const note = await chatStream({
-        model: MODEL_NAME,
+        model: getModelName(),
         messages: [{ role: 'user', content: notePrompt }],
         temperature: 0.3,
         onToken: () => {}
