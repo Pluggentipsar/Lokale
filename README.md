@@ -9,13 +9,71 @@ hårdvara — ingen data lämnar maskinen.
 > [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) för hur de tre fundamenten
 > (pedagogiskt, adaptivt, ansvarsfullt) avbildas i koden.
 
+## Komma igång
+
+### 1. Installera förutsättningar
+
+- **Node 22+** och **npm**
+- **Rust stable** (`rustup install stable`)
+- **[Ollama](https://ollama.com)** — installera och starta så att
+  `localhost:11434` svarar
+- **Linux:** dessutom GTK/WebKit-byggberoenden:
+  ```
+  sudo apt install libgtk-3-dev libwebkit2gtk-4.1-dev \
+       libayatana-appindicator3-dev librsvg2-dev libssl-dev
+  ```
+
+### 2. Hämta modellerna
+
+```bash
+ollama pull gemma3:4b           # chat-modellen (obligatorisk)
+ollama pull nomic-embed-text    # för RAG (rekommenderas, frivillig)
+```
+
+### 3. Bygg och starta
+
+```bash
+npm install
+npm run tauri:dev
+```
+
+Första bygget tar några minuter (Rust kompileras). Efter det är
+varmstart ~5 sek. Tauri-fönstret poppar upp och du landar på Ollama-
+status-skärmen — om allt funkar går den vidare till scenariolistan.
+
+### Frivilliga röstberoenden
+
+Installera om du vill ha tal in/ut:
+
+- **whisper.cpp** för STT. `whisper-cli` på PATH + en spansk modell
+  (t.ex. `ggml-small.bin`).
+- **piper** för TTS. `piper` på PATH + en spansk röst (t.ex.
+  `es_ES-davefx-medium.onnx`).
+
+Peka ut modell-filerna i appens *Inställningar*-flik. Utan dessa fungerar
+textläget oförändrat — röstknappen visar bara att binären saknas.
+
+## Vad du kan göra just nu
+
+- **8 rollspels-scenarier** (6 A1, 2 A2): café, presentation,
+  vägbeskrivning, marknad, familj, klockslag, restaurang, helgplaner.
+- **Hint-eskalering**: tutorn vägrar översätta utan försök, eskalerar
+  från öppen fråga → kategori-hint → form-hint → worked example.
+- **Spaced repetition** (FSRS): varje vokabord och grammatik-koncept
+  schemaläggs individuellt baserat på hur sessionen gick.
+- **Open Learner Model** (`/progress`): se vad systemet tror om dig,
+  invänd med "jag kan"-knappen.
+- **Lokal RAG**: tutorn citerar curriculum-utdrag när det passar.
+- **Historik** (`/history`): bläddra alla tidigare sessioner inklusive
+  vad tutorn "noterade" per turn.
+- **Röst** (om binärer finns): push-to-talk + "läs upp tutorn"-toggle.
+
 ## Designaxiom
 
 1. **Lokalt först.** Whisper/Piper/Gemma/embeddings kör allt på CPU/GPU
    lokalt. Ingen extern API-anrop ens som fallback.
 2. **Smal scope.** En målgrupp (svenska elever som lär sig spanska
-   A1–B1), några få aktiviteter (rollspel, meningsrekonstruktion,
-   högläsning, fri skrivning). Säg nej till resten.
+   A1–B1). Säg nej till resten.
 3. **Productive struggle.** Modellen översätter inte och ger inte svar
    utan ett försök först — det är inte en begränsning, det är *poängen*.
 4. **Adaptivitet via state, inte via stor modell.** Allt vi vet om eleven
@@ -28,117 +86,119 @@ hårdvara — ingen data lämnar maskinen.
 
 | Lager | Val | Varför |
 |---|---|---|
-| Skal | Tauri + Svelte | Single-click installer, liten binär, riktiga OS-API:er |
-| LLM | Ollama (initialt) → llama.cpp sidecar (senare) | Ollama först för snabb iteration; sidecar för att slippa beroenden vid skoldistribution |
-| Modell | `gemma3:4b` / `qwen2.5:3b` (utbytbart) | Tillräcklig för A1–B1 spanska |
-| STT | whisper.cpp (`small` ES) | CPU-realtid |
-| TTS | Piper (es_ES) | ~60MB, CPU-realtid |
+| Skal | Tauri 2 + SvelteKit + Svelte 5 | Single-click installer, liten binär, riktiga OS-API:er |
+| Styling | Tailwind v4 | Snabb iteration, OKLCH-färger med dark mode |
+| LLM | Ollama (initialt) → bundlad llama.cpp (M4) | Snabb iteration nu, bundling när vi distribuerar |
+| Modell | `gemma3:4b` (default, utbytbart) | Tillräcklig för A1–B1 spanska |
+| STT | whisper.cpp via PATH | Lokal, snabb på CPU |
+| TTS | piper via PATH | ~60MB röster, realtid på CPU |
 | Embeddings | `nomic-embed-text` via Ollama | Återanvänder befintlig runtime |
-| Lagring | SQLite + `sqlite-vec` | En fil, allt på ett ställe |
-| SRS | FSRS (öppen impl., ts/rust) | Modernare än SM-2, datadriven |
+| Lagring | SQLite via tauri-plugin-sql | En fil per elev, allt på ett ställe |
+| Vektor-sök | Brute-force cosine i TS (inte sqlite-vec) | Korpus litet, < 500 chunks |
+| SRS | ts-fsrs | Modernare än SM-2, datadriven |
 
-## Mappstruktur (planerad)
+## Mappstruktur
 
 ```
 Lokale/
-├── README.md                         ← du är här
+├── README.md
 ├── docs/
-│   ├── ARCHITECTURE.md               ← mappning mot pappret + komponentbeskrivning
-│   └── ROADMAP.md                    ← milstolpar M0..M3
-├── prompts/
-│   ├── system_tutor.md               ← persona, hårda regler, beteende
-│   ├── feedback_pattern.md           ← attempt → hint → worked example
-│   └── session_open_close.md         ← goal-setting & reflektion
-├── curriculum/                       ← statiskt innehåll, packas med appen
-│   ├── scenarios/
-│   │   └── cafe_a1.json
-│   ├── grammar/
-│   │   └── ser_estar.md
-│   └── vocab/
-│       └── a1_core.json
-├── migrations/
-│   └── 0001_initial.sql              ← DB-schema (källan till sanning)
-├── src/                              ← Svelte-frontend (skapas i M0)
+│   ├── ARCHITECTURE.md     mappning mot pappret + komponentbeskrivning
+│   └── ROADMAP.md          milstolpar M0..M4
+├── prompts/                statiska prompt-template (bundlas i appen)
+│   ├── system_tutor.md
+│   ├── feedback_pattern.md
+│   └── session_open_close.md
+├── curriculum/             statiskt innehåll (bundlas i appen)
+│   ├── scenarios/*.json    rollspels-scenarier
+│   ├── grammar/*.md        grammatik-utdrag för RAG
+│   └── vocab/*.json        vokabulärfrön
+├── migrations/             SQLite-schema, körs av tauri-plugin-sql
+│   ├── 0001_initial.sql
+│   └── 0002_curriculum_index.sql
+├── src/                    SvelteKit-frontend
 │   ├── routes/
-│   │   ├── +page.svelte              ← aktiv session
-│   │   ├── progress/+page.svelte     ← Open Learner Model
-│   │   └── settings/+page.svelte
+│   │   ├── +page.svelte             aktiv session (state machine)
+│   │   ├── progress/+page.svelte    Open Learner Model
+│   │   ├── history/+page.svelte     sessionslista
+│   │   ├── history/[id]/+page.svelte  session-detalj
+│   │   └── settings/+page.svelte    profil + röstinställningar
 │   └── lib/
-│       ├── components/               ← ChatTurn, DueItemsPanel, PushToTalk, OLM
-│       ├── stores/                   ← session, learner
-│       ├── api/                      ← ollama, whisper, piper (via Tauri)
-│       └── pedagogy/                 ← prompts.ts, fsrs.ts, engagement.ts
-├── src-tauri/                        ← Rust-backend (skapas i M0)
-│   ├── Cargo.toml
-│   ├── tauri.conf.json
-│   ├── src/
-│   │   ├── main.rs
-│   │   ├── db.rs                     ← SQLite + migrations
-│   │   ├── sidecar.rs                ← whisper/piper subprocess
-│   │   └── ollama.rs                 ← health check, modell-pull
-│   └── binaries/                     ← whisper, piper-binärer per OS
-└── .gitignore
+│       ├── components/   ChatTurn, ChatView, SessionOpen/Close,
+│       │                  ScenarioPicker, PushToTalk, OllamaGate
+│       ├── api/          ollama (chat+stream), embed, voice (invoke)
+│       ├── pedagogy/     prompts.ts (assemble), fsrs.ts, rating.ts
+│       ├── db.ts         alla SQLite-frågor
+│       ├── curriculum.ts scenarier + item-derivering
+│       ├── rag.ts        embedding-index + cosine-retrieval
+│       └── state.svelte.ts  Svelte 5 runes-baserad app-state
+└── src-tauri/             Rust-backend
+    ├── Cargo.toml
+    ├── tauri.conf.json
+    ├── src/
+    │   ├── main.rs
+    │   ├── lib.rs        SQL-plugin + invoke handlers
+    │   └── voice.rs      whisper/piper subprocess-bryggor
+    ├── capabilities/default.json
+    └── icons/
 ```
 
-## Köra
+## Utveckling
 
-Förutsättningar:
-- Node 22+, Rust stable, npm
-- [Ollama](https://ollama.com) installerat och igång
-- Linux-byggberoenden (bara på Linux):
-  `apt install libgtk-3-dev libwebkit2gtk-4.1-dev libayatana-appindicator3-dev librsvg2-dev libssl-dev`
+### Type-check och bygg
 
 ```bash
-# 1. Hämta modellerna
-ollama pull gemma3:4b           # chat-modellen (krävs)
-ollama pull nomic-embed-text    # för RAG (rekommenderas)
-
-# 2. Installera frontend-deps
-npm install
-
-# 3. Starta appen i dev-läge (Tauri öppnar ett fönster)
-npm run tauri:dev
+npm run check           # svelte-check (TS + Svelte)
+npm run build           # frontend-bygge (statiska filer i build/)
+npm run tauri:dev       # hela appen i dev-läge
+npm run tauri:build     # produktions-bundle (.dmg/.msi/.AppImage)
 ```
 
-Utan `nomic-embed-text` fungerar appen ändå — RAG-blocket utelämnas tyst
-ur prompten.
+### Bara frontend (utan Tauri)
 
-Första körningen tar några minuter (Rust-kompilering). Efter det är
-varmstart ~5 sek.
-
-### Bara frontend (utan Tauri-fönstret)
-
-Om du vill iterera snabbt på UI utan att starta Tauri:
 ```bash
 npm run dev
 ```
-Öppna `http://localhost:1420`. SQLite kommer inte fungera utan Tauri,
-men UI:t laddar.
+Öppna `http://localhost:1420`. SQLite/röst fungerar inte utan Tauri,
+men UI-iteration går snabbare.
 
-## Frivilliga röst-beroenden (M2)
+### Lägga till ett scenario
 
-Installera om du vill ha tal in/ut:
+1. Skapa `curriculum/scenarios/min_scen.json` enligt mönster från
+   befintliga.
+2. Importera och registrera i `src/lib/curriculum.ts`.
+3. (Inga andra ändringar behövs — items deriveras automatiskt.)
 
-- **whisper.cpp** för tal → text. Säkerställ att `whisper-cli` finns på PATH.
-  - Ladda en spansk modell, t.ex. `ggml-small.bin`, och peka ut den i
-    inställningar.
-- **piper** för text → tal. `piper` på PATH. Ladda en spansk röst,
-  t.ex. `es_ES-davefx-medium.onnx`.
+### Lägga till ett grammatikutdrag för RAG
 
-Utan dessa fungerar textläget oförändrat — röstknappen visar bara att
-binären saknas.
+1. Skapa `curriculum/grammar/mitt_amne.md`.
+2. Importera och lägg till i `SOURCES`-arrayen i `src/lib/rag.ts`.
+3. Vid nästa start re-indexeras filen (hash skiljer).
+
+### Justera tutor-prompten
+
+`prompts/system_tutor.md` och `prompts/feedback_pattern.md` är de
+viktigaste filerna. De bundlas vid bygget via `?raw`-import — efter
+ändring krävs `npm run tauri:dev`-omstart för att Vite ska plocka upp
+dem.
+
+### Felsökning
+
+- **"Kan inte nå Ollama"**: kör `ollama serve` i en annan terminal, eller
+  starta Ollama-appen.
+- **"Modellen saknas"**: `ollama pull gemma3:4b`.
+- **Långsamma svar**: testa en mindre modell, t.ex. `qwen2.5:3b`.
+  Ändra `MODEL_NAME` i `src/lib/state.svelte.ts`.
+- **Tutorn glömmer meta-blocket**: minskar med större modell.
+  `extractMeta` har fallback för flera format men inte alla. Se chat-
+  bubblans "noteringar"-band — om det saknas helt ger den ingen FSRS-
+  uppdatering, vilket är okej men suboptimalt.
+- **Vill börja om från noll**: `Inställningar → Rensa all data` (eller
+  ta bort `lokale.db` från app-data-mappen).
 
 ## Status
 
 **M0, M1 klara. M2 (röst) och M3 (RAG) delvis klara.**
 
-Du kan:
-- starta sessioner med tre olika scenarier (café, presentation, vägbeskrivning)
-- få hint-eskalerande feedback från lokal modell
-- följa progress via OLM-vyn med FSRS-baserad schemaläggning
-- få curriculum-citat via lokal RAG (kräver `nomic-embed-text`)
-- (med whisper.cpp installerat) tala på spanska och få transkription
-- (med piper installerat) höra tutorn läsa upp sina svar
-- konfigurera namn, modersmål, nivå och röstinställningar
-
-Se [`docs/ROADMAP.md`](docs/ROADMAP.md) för vad som är kvar.
+Se [`docs/ROADMAP.md`](docs/ROADMAP.md) för exakt vad som är klart och
+vad som väntar.
