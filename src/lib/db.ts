@@ -415,6 +415,99 @@ export async function listRecentNotes(limit: number): Promise<NoteRecord[]> {
   return rows.map(rowToNote);
 }
 
+export interface SessionRow {
+  id: number;
+  started_at: string;
+  ended_at: string | null;
+  scenario_id: string | null;
+  goal: string | null;
+  closing_reflection: string | null;
+  model_name: string | null;
+  encounter_count: number;
+}
+
+export async function listSessions(): Promise<SessionRow[]> {
+  const conn = await db();
+  type Row = {
+    id: number;
+    started_at: string;
+    ended_at: string | null;
+    scenario_id: string | null;
+    goal: string | null;
+    closing_reflection: string | null;
+    model_name: string | null;
+    encounter_count: number | null;
+  };
+  const rows = await conn.select<Row[]>(
+    `SELECT s.id, s.started_at, s.ended_at, s.scenario_id, s.goal,
+            s.closing_reflection, s.model_name,
+            (SELECT COUNT(*) FROM encounters e WHERE e.session_id = s.id) AS encounter_count
+       FROM sessions s
+       ORDER BY s.started_at DESC`
+  );
+  return rows.map((r) => ({ ...r, encounter_count: r.encounter_count ?? 0 }));
+}
+
+export interface EncounterRow {
+  id: number;
+  turn_index: number;
+  speaker: 'student' | 'tutor';
+  text: string;
+  target_items: string[] | null;
+  observed_errors: string[] | null;
+  engagement: string | null;
+  next_move: string | null;
+  ts: string;
+}
+
+export async function listEncounters(sessionId: number): Promise<EncounterRow[]> {
+  const conn = await db();
+  type Row = {
+    id: number;
+    turn_index: number;
+    speaker: string;
+    text: string;
+    target_items_json: string | null;
+    observed_errors_json: string | null;
+    engagement: string | null;
+    next_move: string | null;
+    ts: string;
+  };
+  const rows = await conn.select<Row[]>(
+    `SELECT id, turn_index, speaker, text, target_items_json, observed_errors_json,
+            engagement, next_move, ts
+       FROM encounters
+      WHERE session_id = $1
+      ORDER BY turn_index ASC`,
+    [sessionId]
+  );
+  return rows.map((r) => ({
+    id: r.id,
+    turn_index: r.turn_index,
+    speaker: r.speaker as 'student' | 'tutor',
+    text: r.text,
+    target_items: r.target_items_json ? (JSON.parse(r.target_items_json) as string[]) : null,
+    observed_errors: r.observed_errors_json
+      ? (JSON.parse(r.observed_errors_json) as string[])
+      : null,
+    engagement: r.engagement,
+    next_move: r.next_move,
+    ts: r.ts
+  }));
+}
+
+export async function listSessionNotes(sessionId: number): Promise<NoteRecord[]> {
+  const conn = await db();
+  const rows = await conn.select<NoteRow[]>(
+    `SELECT id, session_id, created_at, body, tags_json
+       FROM notes
+      WHERE session_id = $1
+      ORDER BY created_at ASC`,
+    [sessionId]
+  );
+  return rows.map(rowToNote);
+}
+
 export async function listSummaryNotes(limit: number): Promise<NoteRecord[]> {
   const conn = await db();
   const rows = await conn.select<NoteRow[]>(

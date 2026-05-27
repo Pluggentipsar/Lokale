@@ -26,6 +26,13 @@
         Progress
       </a>
       <a
+        href="/history"
+        class="hover:text-(--color-accent)"
+        class:font-medium={page.route.id?.startsWith('/history')}
+      >
+        Historik
+      </a>
+      <a
         href="/settings"
         class="hover:text-(--color-accent)"
         class:font-medium={page.route.id === '/settings'}
