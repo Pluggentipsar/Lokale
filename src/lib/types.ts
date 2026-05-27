@@ -63,6 +63,9 @@ export interface NoteRecord {
 
 export interface Scenario {
   id: string;
+  /** "roleplay" (default) eller "writing". Avgör vilket system-prompt-
+   *  paket som används och hur UI:t presenterar aktiviteten. */
+  activity_type?: 'roleplay' | 'writing';
   title: string;
   level: string;
   estimated_minutes: number;

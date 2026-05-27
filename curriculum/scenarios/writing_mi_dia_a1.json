@@ -1,0 +1,38 @@
+{
+  "id": "writing_mi_dia_a1",
+  "activity_type": "writing",
+  "title": "Skriv: en vanlig dag",
+  "level": "A1",
+  "estimated_minutes": 12,
+  "setting": "En skrivuppgift om dagliga rutiner. Eleven får träna presens av regelbundna verb och tidsuttryck.",
+  "tutor_role": "skrivcoach",
+  "opening_line": "Escribe 4–6 frases sobre un día normal para ti. ¿A qué hora te levantas? ¿Qué comes? ¿Qué haces por la tarde? Cuando termines, te ayudo a revisarlo.",
+  "success_criteria": [
+    "Eleven skriver minst 4 fullständiga meningar",
+    "Eleven använder presens av minst två olika verb",
+    "Eleven inkluderar minst en tidsuttryck (a las..., por la mañana, etc.)"
+  ],
+  "target_items": [
+    {
+      "ref": "grammar:presente_regular_a1",
+      "note": "yo, tú, él/ella-former av -ar/-er/-ir-verb"
+    },
+    {
+      "ref": "grammar:reflexive_basic_a1",
+      "note": "me levanto, me ducho — eleven kanske skippar reflexiverbens pronomen"
+    },
+    {
+      "ref": "vocab:daily_routine_a1",
+      "lemmas": ["levantarse", "desayunar", "comer", "cenar", "estudiar", "trabajar", "dormir"]
+    },
+    {
+      "ref": "vocab:time_words_a1",
+      "lemmas": ["mañana", "tarde", "noche", "siempre", "a veces", "nunca"]
+    }
+  ],
+  "exit_signals": [
+    "eleven har reviderat sin text minst en gång",
+    "eleven anser sig klar"
+  ],
+  "notes_for_tutor": "Detta är en skrivuppgift, inte ett rollspel. Eleven kommer skriva en paragraf. Välj UT ETT specifikt mönster att jobba med (t.ex. reflexiverben om de glömt pronomen, eller verbböjning om de blandar formerna). Berätta vad du valde och varför. Be eleven skriva om just den delen. Acceptera att andra fel finns kvar — de hör till senare sessioner."
+}

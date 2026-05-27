@@ -1,0 +1,38 @@
+{
+  "id": "writing_fin_semana_a2",
+  "activity_type": "writing",
+  "title": "Skriv: i helgen",
+  "level": "A2",
+  "estimated_minutes": 15,
+  "setting": "Skrivuppgift om vad eleven gjorde i helgen. Tränar preteritum av regelbundna och vanliga oregelbundna verb.",
+  "tutor_role": "skrivcoach",
+  "opening_line": "Cuéntame qué hiciste el fin de semana pasado. Escribe 5–7 frases. ¿Adónde fuiste? ¿Con quién? ¿Qué te gustó más? Yo te ayudo con una cosa cuando termines.",
+  "success_criteria": [
+    "Eleven använder preteritum (pretérito indefinido) för avslutade händelser",
+    "Eleven nämner minst två olika aktiviteter med olika verb",
+    "Eleven uttrycker en åsikt med gustar i preteritum (me gustó/no me gustó)"
+  ],
+  "target_items": [
+    {
+      "ref": "grammar:preterito_regular_a2",
+      "note": "Regelbunden preteritum: -ar → -é/-aste/-ó/...; -er/-ir → -í/-iste/-ió/..."
+    },
+    {
+      "ref": "grammar:preterito_irregular_basic_a2",
+      "note": "ir/ser (fui, fuiste, fue, ...), hacer (hice, hiciste, hizo, ...), estar (estuve, ...)"
+    },
+    {
+      "ref": "grammar:gustar_past_a2",
+      "note": "me gustó (singular eller infinitiv), me gustaron (plural)"
+    },
+    {
+      "ref": "vocab:free_time_a2",
+      "lemmas": ["cine", "playa", "museo", "concierto", "partido", "fiesta"]
+    }
+  ],
+  "exit_signals": [
+    "eleven har reviderat sin text minst en gång",
+    "eleven anser sig klar"
+  ],
+  "notes_for_tutor": "Skrivuppgift. Preteritum är A2-tröskelkonceptet — om eleven använder presens där preteritum krävs, det är fokus. Om eleven blandar regelbundna och oregelbundna former (säger 'hací' istället för 'hice'), peka på just den meningen och be om reformulering. Acceptera 'fui al cine' utan att jaga 'al cine' vs 'al cine que está cerca de...' — håll fokuset smalt."
+}

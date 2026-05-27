@@ -11,6 +11,7 @@ import type { ItemWithState, NoteRecord, Scenario } from '$lib/types';
 import type { RetrievedChunk } from '$lib/rag';
 
 import systemTutor from '../../../prompts/system_tutor.md?raw';
+import systemWriting from '../../../prompts/system_writing.md?raw';
 import feedbackPattern from '../../../prompts/feedback_pattern.md?raw';
 
 export interface PromptInputs {
@@ -46,7 +47,9 @@ function describeItem(iws: ItemWithState): string {
 }
 
 export function buildSystemPrompt(inputs: PromptInputs): string {
-  const persona = fillVariables(systemTutor, {
+  const isWriting = inputs.scenario.activity_type === 'writing';
+  const personaTemplate = isWriting ? systemWriting : systemTutor;
+  const persona = fillVariables(personaTemplate, {
     l1: inputs.l1,
     target_level: inputs.targetLevel
   });
@@ -72,14 +75,15 @@ export function buildSystemPrompt(inputs: PromptInputs): string {
 ## REFERENS FRÅN CURRICULUM (faktautdrag — citera bara om relevant)
 ${inputs.references.map((r) => `  > ${r.content}  \n    [källa: ${r.source_path}, similarity ${r.similarity.toFixed(2)}]`).join('\n')}`;
 
+  const activityHeader = isWriting ? 'SKRIVUPPGIFT' : 'SCENARIO';
   const runtime = `
 ---
 # RUNTIME-KONTEXT
 
-## SCENARIO
+## ${activityHeader}
 - id: ${inputs.scenario.id}
 - titel: ${inputs.scenario.title}
-- miljö: ${inputs.scenario.setting}
+- ${isWriting ? 'sammanhang' : 'miljö'}: ${inputs.scenario.setting}
 - din roll: ${inputs.scenario.tutor_role}
 - öppningsreplik (säg denna ordagrant först): "${inputs.scenario.opening_line}"
 - exit-signaler: ${inputs.scenario.exit_signals.join('; ')}
@@ -97,6 +101,11 @@ ${notesBlock}${referencesBlock}
 ---
 `.trim();
 
+  if (isWriting) {
+    // Skrivcoachen har sin egen feedback-disciplin i system_writing.md;
+    // hint-eskaleringen från feedback_pattern.md hör till rollspel.
+    return [persona, '\n\n', runtime].join('');
+  }
   return [persona, '\n\n---\n# FEEDBACK-MÖNSTER\n', feedbackPattern, '\n\n', runtime].join('');
 }
 

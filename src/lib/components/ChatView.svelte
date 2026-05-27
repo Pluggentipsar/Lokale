@@ -19,6 +19,20 @@
 
   let input = $state('');
   let scrollEl: HTMLDivElement;
+  let textareaEl: HTMLTextAreaElement;
+
+  // Auto-grow textarea efter innehållets höjd, max ~10 rader.
+  function autoResize() {
+    if (!textareaEl) return;
+    textareaEl.style.height = 'auto';
+    const max = 24 * 10; // ~10 rader vid 24px line-height
+    textareaEl.style.height = Math.min(textareaEl.scrollHeight, max) + 'px';
+  }
+
+  $effect(() => {
+    void input;
+    autoResize();
+  });
 
   // Filtrera bort eventuellt META-block ur strömmen så användaren inte ser
   // <<META>>... växa fram. extractMeta sker fortfarande på full raw text.
@@ -67,12 +81,13 @@
     class="border-t border-(--color-muted)/20 p-4 flex items-end gap-2"
   >
     <textarea
+      bind:this={textareaEl}
       bind:value={input}
       onkeydown={onKey}
       rows="2"
       placeholder="Skriv på spanska... (försök själv först)"
       disabled={isStreaming}
-      class="flex-1 px-4 py-3 rounded-xl border border-(--color-muted)/30 bg-(--color-bg) focus:outline-none focus:border-(--color-accent) resize-none disabled:opacity-50"
+      class="flex-1 px-4 py-3 rounded-xl border border-(--color-muted)/30 bg-(--color-bg) focus:outline-none focus:border-(--color-accent) resize-none disabled:opacity-50 overflow-y-auto"
     ></textarea>
     <div class="flex flex-col gap-2 items-end">
       <button

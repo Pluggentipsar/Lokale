@@ -21,6 +21,9 @@ import familiaA1 from '../../curriculum/scenarios/familia_a1.json?raw';
 import horaA1 from '../../curriculum/scenarios/hora_a1.json?raw';
 import restauranteA2 from '../../curriculum/scenarios/restaurante_a2.json?raw';
 import planesA2 from '../../curriculum/scenarios/planes_a2.json?raw';
+import writingMiDiaA1 from '../../curriculum/scenarios/writing_mi_dia_a1.json?raw';
+import writingMiCiudadA2 from '../../curriculum/scenarios/writing_mi_ciudad_a2.json?raw';
+import writingFinSemanaA2 from '../../curriculum/scenarios/writing_fin_semana_a2.json?raw';
 
 const SCENARIOS: Record<string, Scenario> = (() => {
   const parsed: Record<string, Scenario> = {};
@@ -32,7 +35,10 @@ const SCENARIOS: Record<string, Scenario> = (() => {
     familiaA1,
     horaA1,
     restauranteA2,
-    planesA2
+    planesA2,
+    writingMiDiaA1,
+    writingMiCiudadA2,
+    writingFinSemanaA2
   ];
   for (const raw of raws) {
     const s = JSON.parse(raw) as Scenario;

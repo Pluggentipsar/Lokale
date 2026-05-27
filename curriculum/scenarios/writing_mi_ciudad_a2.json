@@ -1,0 +1,38 @@
+{
+  "id": "writing_mi_ciudad_a2",
+  "activity_type": "writing",
+  "title": "Skriv: min stad",
+  "level": "A2",
+  "estimated_minutes": 15,
+  "setting": "Skrivuppgift där eleven beskriver sin hemstad. Tränar ser/estar-distinktion, adjektiv-kongruens och hay vs estar.",
+  "tutor_role": "skrivcoach",
+  "opening_line": "Describe la ciudad donde vives en 5–7 frases. ¿Cómo es? ¿Qué hay? ¿Qué te gusta y qué no te gusta de ella? Yo después te ayudo con una o dos cosas concretas.",
+  "success_criteria": [
+    "Eleven använder både ser och estar minst en gång var",
+    "Eleven använder 'hay' för att beskriva vad som finns",
+    "Eleven inkluderar minst en åsikt med gustar-konstruktion"
+  ],
+  "target_items": [
+    {
+      "ref": "grammar:ser_vs_estar_a2",
+      "note": "ser för varaktiga egenskaper, estar för läge och tillfälligt tillstånd; hay för existens"
+    },
+    {
+      "ref": "grammar:adjective_agreement_a2",
+      "note": "adjektiv stämmer i genus och numerus med substantivet"
+    },
+    {
+      "ref": "grammar:gustar_constructions_a2",
+      "note": "me gusta + sg, me gustan + pl"
+    },
+    {
+      "ref": "vocab:city_a2",
+      "lemmas": ["ciudad", "barrio", "calle", "parque", "tiendas", "museo", "tranquilo", "ruidoso", "moderno", "antiguo"]
+    }
+  ],
+  "exit_signals": [
+    "eleven har reviderat sin text minst en gång",
+    "eleven anser sig klar"
+  ],
+  "notes_for_tutor": "Detta är en skrivuppgift. Eleven skriver en längre paragraf. Ser/estar-blandning är extremt vanligt på A2 — om eleven gör det, välj det som fokus. Annars titta på adjektivkongruens (svensktalande missar ofta att 'una ciudad pequeño' ska vara 'pequeña'). Välj EN sak. Skriv vad du valde och varför. Be eleven omformulera just den meningen."
+}
