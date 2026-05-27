@@ -508,6 +508,24 @@ export async function listSessionNotes(sessionId: number): Promise<NoteRecord[]>
   return rows.map(rowToNote);
 }
 
+/**
+ * Nukar all elev-data. Profilen återskapas tom; items/sessions/notes/
+ * curriculum_chunks töms. Curriculum-index byggs om vid nästa
+ * sessionsstart.
+ */
+export async function wipeAllData(): Promise<void> {
+  const conn = await db();
+  await conn.execute(`DELETE FROM encounters`);
+  await conn.execute(`DELETE FROM notes`);
+  await conn.execute(`DELETE FROM sessions`);
+  await conn.execute(`DELETE FROM review_state`);
+  await conn.execute(`DELETE FROM items`);
+  await conn.execute(`DELETE FROM curriculum_chunks`);
+  await conn.execute(`DELETE FROM curriculum_index_meta`);
+  await conn.execute(`DELETE FROM profile`);
+  await conn.execute(`DELETE FROM settings`);
+}
+
 export async function listSummaryNotes(limit: number): Promise<NoteRecord[]> {
   const conn = await db();
   const rows = await conn.select<NoteRow[]>(

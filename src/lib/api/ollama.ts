@@ -120,32 +120,95 @@ export async function chatStream(opts: ChatStreamOptions): Promise<string> {
 }
 
 const META_RE = /<<META>>([\s\S]*?)<<END>>/;
+// Fallback: hitta sista JSON-objektet i utdata om <<META>>-markörerna saknas
+// (vissa små modeller glömmer ramarna men producerar fortfarande JSON).
+const TRAILING_JSON_RE = /\{[^{}]*"target_items"[\s\S]*?\}\s*$/;
+
+function validateMeta(obj: unknown): TutorMeta | null {
+  if (!obj || typeof obj !== 'object') return null;
+  const p = obj as Partial<TutorMeta>;
+  const engagementOk =
+    p.engagement === 'passive' ||
+    p.engagement === 'active' ||
+    p.engagement === 'constructive';
+  if (
+    Array.isArray(p.target_items) &&
+    Array.isArray(p.observed_errors) &&
+    engagementOk &&
+    typeof p.next_move === 'string'
+  ) {
+    return p as TutorMeta;
+  }
+  return null;
+}
 
 /**
- * Plockar ut <<META>>...<<END>>-blocket från LLM-utdata. Returnerar både
- * det rensade visningsbara svaret och den strukturerade metadatan om
- * den kunde parsas.
+ * Plockar ut <<META>>...<<END>>-blocket (eller trailing JSON-fallback)
+ * från LLM-utdata. Returnerar det rensade visningsbara svaret och
+ * den strukturerade metadatan om den kunde parsas.
+ *
+ * Robust mot:
+ * - markdown-fenced JSON (```json ... ```)
+ * - blank rad mellan <<META>> och innehållet
+ * - modellen som glömmer <<END>>-markören
+ * - trailing JSON utan ramar
  */
 export function extractMeta(raw: string): {
   display: string;
   meta: TutorMeta | null;
 } {
-  const match = raw.match(META_RE);
-  if (!match) return { display: raw.trim(), meta: null };
+  let working = raw;
 
-  const display = raw.replace(META_RE, '').trim();
-  try {
-    const parsed = JSON.parse(match[1]) as Partial<TutorMeta>;
-    if (
-      Array.isArray(parsed.target_items) &&
-      Array.isArray(parsed.observed_errors) &&
-      typeof parsed.engagement === 'string' &&
-      typeof parsed.next_move === 'string'
-    ) {
-      return { display, meta: parsed as TutorMeta };
+  // 1. Försök hitta <<META>>...<<END>>-blocket
+  const match = working.match(META_RE);
+  if (match) {
+    const inner = match[1].replace(/```json|```/g, '').trim();
+    try {
+      const parsed = JSON.parse(inner);
+      const valid = validateMeta(parsed);
+      if (valid) {
+        return { display: working.replace(META_RE, '').trim(), meta: valid };
+      }
+    } catch {
+      /* fall through */
     }
-  } catch {
-    /* fall through */
   }
-  return { display, meta: null };
+
+  // 2. Försök hitta <<META>> utan <<END>> — tag allt efter och försök parsa
+  const startIdx = working.indexOf('<<META>>');
+  if (startIdx !== -1) {
+    const tail = working.slice(startIdx + '<<META>>'.length).trim();
+    // Hitta första balanserade {...}
+    const objMatch = tail.match(/\{[\s\S]*?\}\s*(?:<<END>>)?/);
+    if (objMatch) {
+      try {
+        const parsed = JSON.parse(objMatch[0].replace(/<<END>>/g, ''));
+        const valid = validateMeta(parsed);
+        if (valid) {
+          return { display: working.slice(0, startIdx).trim(), meta: valid };
+        }
+      } catch {
+        /* fall through */
+      }
+    }
+  }
+
+  // 3. Trailing JSON utan ramar
+  const trailing = working.match(TRAILING_JSON_RE);
+  if (trailing) {
+    try {
+      const parsed = JSON.parse(trailing[0]);
+      const valid = validateMeta(parsed);
+      if (valid) {
+        return {
+          display: working.slice(0, working.length - trailing[0].length).trim(),
+          meta: valid
+        };
+      }
+    } catch {
+      /* fall through */
+    }
+  }
+
+  return { display: raw.trim(), meta: null };
 }

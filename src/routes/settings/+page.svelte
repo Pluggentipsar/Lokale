@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { ensureProfile, updateProfile } from '$lib/db';
+  import { ensureProfile, updateProfile, wipeAllData } from '$lib/db';
   import {
     loadVoiceSettings,
     saveVoiceSettings,
@@ -36,6 +36,20 @@
     localStorage.setItem('lokale.speak_along', speakAlong ? '1' : '0');
     saved = true;
     setTimeout(() => (saved = false), 2000);
+  }
+
+  let confirmingWipe = $state(false);
+  let wiping = $state(false);
+
+  async function doWipe() {
+    wiping = true;
+    try {
+      await wipeAllData();
+      localStorage.clear();
+      window.location.href = '/';
+    } finally {
+      wiping = false;
+    }
   }
 </script>
 
@@ -164,5 +178,41 @@
         <span class="ml-3 text-sm text-(--color-muted)">Sparat.</span>
       {/if}
     </form>
+
+    <section class="pt-8 mt-8 border-t border-(--color-muted)/20 space-y-3">
+      <h3 class="font-serif text-lg">Rensa allt</h3>
+      <p class="text-sm text-(--color-muted)">
+        Tar bort din profil, alla sessioner, noteringar, items och curriculum-index.
+        Går inte att ångra.
+      </p>
+      {#if !confirmingWipe}
+        <button
+          type="button"
+          onclick={() => (confirmingWipe = true)}
+          class="px-4 py-2 rounded-xl border border-red-500/40 text-red-500 hover:bg-red-500/10 text-sm"
+        >
+          Rensa all data
+        </button>
+      {:else}
+        <div class="flex items-center gap-2">
+          <button
+            type="button"
+            onclick={doWipe}
+            disabled={wiping}
+            class="px-4 py-2 rounded-xl bg-red-500 text-white text-sm disabled:opacity-50"
+          >
+            {wiping ? 'Rensar...' : 'Ja, rensa allt'}
+          </button>
+          <button
+            type="button"
+            onclick={() => (confirmingWipe = false)}
+            disabled={wiping}
+            class="px-4 py-2 rounded-xl text-sm text-(--color-muted)"
+          >
+            Avbryt
+          </button>
+        </div>
+      {/if}
+    </section>
   {/if}
 </div>
