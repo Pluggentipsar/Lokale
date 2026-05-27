@@ -368,6 +368,19 @@ export async function closeSession(
   );
 }
 
+export async function deleteSession(sessionId: number): Promise<void> {
+  const conn = await db();
+  // CASCADE i schemat tar hand om encounters; notes kvarstår med
+  // session_id satt till NULL via SET NULL — vi vill faktiskt radera
+  // session_summary-noten också, men låter andra noter (t.ex.
+  // self_rating) leva på som historik.
+  await conn.execute(
+    `DELETE FROM notes WHERE session_id = $1 AND tags_json LIKE '%session_summary%'`,
+    [sessionId]
+  );
+  await conn.execute(`DELETE FROM sessions WHERE id = $1`, [sessionId]);
+}
+
 // ---------------------------------------------------------------------
 // Notes
 // ---------------------------------------------------------------------

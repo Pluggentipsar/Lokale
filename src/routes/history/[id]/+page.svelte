@@ -5,11 +5,13 @@
     listSessions,
     listEncounters,
     listSessionNotes,
+    deleteSession,
     type EncounterRow,
     type SessionRow
   } from '$lib/db';
   import type { NoteRecord } from '$lib/types';
   import { getScenario } from '$lib/curriculum';
+  import { goto } from '$app/navigation';
 
   const sessionId = $derived(Number(page.params.id));
 
@@ -17,6 +19,18 @@
   let encounters = $state<EncounterRow[]>([]);
   let notes = $state<NoteRecord[]>([]);
   let loading = $state(true);
+  let confirmingDelete = $state(false);
+  let deleting = $state(false);
+
+  async function doDelete() {
+    deleting = true;
+    try {
+      await deleteSession(sessionId);
+      await goto('/history');
+    } finally {
+      deleting = false;
+    }
+  }
 
   onMount(async () => {
     await load();
@@ -41,8 +55,38 @@
 </script>
 
 <div class="max-w-3xl mx-auto p-6 space-y-6">
-  <div>
+  <div class="flex items-center justify-between">
     <a href="/history" class="text-sm text-(--color-muted) hover:text-(--color-ink)">← historik</a>
+    {#if session}
+      {#if !confirmingDelete}
+        <button
+          type="button"
+          onclick={() => (confirmingDelete = true)}
+          class="text-xs px-3 py-1 rounded-md text-(--color-muted) hover:text-red-500"
+        >
+          radera session
+        </button>
+      {:else}
+        <div class="flex items-center gap-2">
+          <button
+            type="button"
+            onclick={doDelete}
+            disabled={deleting}
+            class="text-xs px-3 py-1 rounded-md bg-red-500 text-white disabled:opacity-50"
+          >
+            {deleting ? 'raderar...' : 'ja, radera'}
+          </button>
+          <button
+            type="button"
+            onclick={() => (confirmingDelete = false)}
+            disabled={deleting}
+            class="text-xs px-3 py-1 rounded-md text-(--color-muted)"
+          >
+            avbryt
+          </button>
+        </div>
+      {/if}
+    {/if}
   </div>
 
   {#if loading}
