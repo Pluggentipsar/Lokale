@@ -115,14 +115,30 @@ npm run dev
 Öppna `http://localhost:1420`. SQLite kommer inte fungera utan Tauri,
 men UI:t laddar.
 
+## Frivilliga röst-beroenden (M2)
+
+Installera om du vill ha tal in/ut:
+
+- **whisper.cpp** för tal → text. Säkerställ att `whisper-cli` finns på PATH.
+  - Ladda en spansk modell, t.ex. `ggml-small.bin`, och peka ut den i
+    inställningar.
+- **piper** för text → tal. `piper` på PATH. Ladda en spansk röst,
+  t.ex. `es_ES-davefx-medium.onnx`.
+
+Utan dessa fungerar textläget oförändrat — röstknappen visar bara att
+binären saknas.
+
 ## Status
 
-**M0 klar.** En elev kan starta en session, ange mål + självskattning,
-ha ett textsamtal med en lokal modell i ett café-rollspel, avsluta med
-en reflektionsfråga som modellen formulerar utifrån just denna session,
-och få sin progress sparad i SQLite. Hint-eskalering, "vägrar översätta
-utan försök" och strukturerad metadata-extraktion fungerar.
+**M0, M1 klara. M2 (röst) och M3 (RAG) delvis klara.**
 
-Saknas (kommer i M1+): OLM-vy, FSRS-schemaläggning, fler scenarion,
-röst, bundlad llama.cpp för installation utan Ollama. Se
-[`docs/ROADMAP.md`](docs/ROADMAP.md).
+Du kan:
+- starta sessioner med tre olika scenarier (café, presentation, vägbeskrivning)
+- få hint-eskalerande feedback från lokal modell
+- följa progress via OLM-vyn med FSRS-baserad schemaläggning
+- få curriculum-citat via lokal RAG (kräver `nomic-embed-text`)
+- (med whisper.cpp installerat) tala på spanska och få transkription
+- (med piper installerat) höra tutorn läsa upp sina svar
+- konfigurera namn, modersmål, nivå och röstinställningar
+
+Se [`docs/ROADMAP.md`](docs/ROADMAP.md) för vad som är kvar.

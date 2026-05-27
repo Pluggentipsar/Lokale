@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { Turn } from '$lib/types';
   import ChatTurn from './ChatTurn.svelte';
+  import PushToTalk from './PushToTalk.svelte';
 
   let {
     turns,
@@ -66,7 +67,7 @@
       disabled={isStreaming}
       class="flex-1 px-4 py-3 rounded-xl border border-(--color-muted)/30 bg-(--color-bg) focus:outline-none focus:border-(--color-accent) resize-none disabled:opacity-50"
     ></textarea>
-    <div class="flex flex-col gap-2">
+    <div class="flex flex-col gap-2 items-end">
       <button
         type="submit"
         disabled={isStreaming || input.trim().length === 0}
@@ -74,6 +75,10 @@
       >
         Skicka
       </button>
+      <PushToTalk
+        disabled={isStreaming}
+        onTranscript={(text) => onSend(text)}
+      />
       <button
         type="button"
         onclick={onFinish}

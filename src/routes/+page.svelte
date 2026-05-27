@@ -26,6 +26,7 @@
   } from '$lib/db';
   import { deriveItemsForScenario, listScenarios } from '$lib/curriculum';
   import { buildIndex, retrieve } from '$lib/rag';
+  import { loadVoiceSettings, speak, voiceAvailability } from '$lib/api/voice';
 
   import OllamaGate from '$lib/components/OllamaGate.svelte';
   import SessionOpen from '$lib/components/SessionOpen.svelte';
@@ -230,6 +231,23 @@
     };
     app.appendTurn(tutorTurn);
     app.pendingTutorText = '';
+
+    // TTS i bakgrunden om aktiverat. Misslyckas tyst.
+    if (localStorage.getItem('lokale.speak_along') === '1') {
+      const settings = loadVoiceSettings();
+      if (settings.piperVoicePath) {
+        const avail = await voiceAvailability();
+        if (avail.piper) {
+          // Filtrera bort *kursiv*-blocks innan uppläsning
+          const spoken = display.replace(/\*[^*]+\*/g, '').trim();
+          if (spoken) {
+            void speak(spoken, settings).catch((err) =>
+              console.warn('TTS failed:', err)
+            );
+          }
+        }
+      }
+    }
 
     await insertEncounter({
       sessionId: session.sessionId,

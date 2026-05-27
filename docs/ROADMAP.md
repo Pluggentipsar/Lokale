@@ -35,13 +35,22 @@ modellen översätta utan ansträngning? känns hint-eskaleringen naturlig?*
 Frågor M1 ska besvara: *känns det att modellen lärt sig något om eleven?
 är OLM:en begriplig för en 14-åring?*
 
-## M2 — "Tala till mig"
+## M2 — "Tala till mig" 🟡 (scaffolding klar)
 *Mål: röstinteraktion fungerar.*
 
-- [ ] Whisper.cpp som Tauri-sidecar, push-to-talk-knapp
-- [ ] Piper som sidecar, tutorn talar tillbaka (kan stängas av)
-- [ ] Uttalsfeedback v0: phoneme-distance vs målmening (förlåtande)
-- [ ] "Lyssnar"-visualisering
+- [x] Tauri-kommandon (`transcribe_audio`, `synthesize_speech`,
+      `voice_availability`) som shellar ut till `whisper-cli` resp. `piper`
+- [x] Push-to-talk-knapp i ChatView (MediaRecorder → base64 → Rust)
+- [x] TTS-flöde med "läs upp tutorn"-toggle, filtrerar bort *kursiv*-coach-text
+- [x] Settings-vy för whisper/piper-modellpaths + språk
+- [x] Soft-fail om binärer saknas — text-flödet fungerar oberoende
+- [ ] Uttalsfeedback (phoneme-distance vs målmening) — kräver phonemizer
+- [ ] "Lyssnar"-visualisering (waveform/level meter)
+
+Användaren installerar `whisper.cpp` och `piper` separat:
+- macOS: `brew install whisper-cpp piper`
+- Linux: bygg från källa eller använd Pakets från distron
+- Windows: ladda ner releases från respektive GitHub
 
 Frågor M2 ska besvara: *hur ofta gissar Whisper fel på elevens spanska?
 hjälper Piper-rösten eller distraherar den?*

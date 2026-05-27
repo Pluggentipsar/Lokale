@@ -1,5 +1,7 @@
 use tauri_plugin_sql::{Builder as SqlBuilder, Migration, MigrationKind};
 
+mod voice;
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     let migrations = vec![
@@ -23,6 +25,11 @@ pub fn run() {
                 .add_migrations("sqlite:lokale.db", migrations)
                 .build(),
         )
+        .invoke_handler(tauri::generate_handler![
+            voice::transcribe_audio,
+            voice::synthesize_speech,
+            voice::voice_availability,
+        ])
         .setup(|_app| Ok(()))
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
