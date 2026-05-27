@@ -55,28 +55,42 @@ Användaren installerar `whisper.cpp` och `piper` separat:
 Frågor M2 ska besvara: *hur ofta gissar Whisper fel på elevens spanska?
 hjälper Piper-rösten eller distraherar den?*
 
-## M3 — "Bredd och RAG" 🟡 (delvis)
+## M3 — "Bredd och RAG" ✅
 *Mål: fler scenarier, riktig RAG.*
 
 - [x] Lokal embedding via Ollama (`nomic-embed-text`)
 - [x] Curriculum-chunkning + indexering (brute-force cosine, ej sqlite-vec)
 - [x] Top-K-retrieval injiceras i prompten som REFERENS-block
 - [x] Idempotent index-bygge (hash-baserad change detection)
-- [x] 8 scenarion (6 A1 + 2 A2): café, presentation, vägbeskrivning,
-      marknad, familj, klockslag, restaurang, helgplaner
-- [ ] Meningsrekonstruktion som aktivitetstyp
-- [ ] Fri skrivning med 1–2-fels-feedback
+- [x] 14 aktiviteter (11 rollspel + 3 skrivuppgifter): café, presentation,
+      vägbeskrivning, marknad, familj, klockslag, hobbies, skola,
+      restaurang, helgplaner, apotek, min dag (skriv), min stad (skriv),
+      i helgen (skriv)
+- [x] Fri skrivning med 1–2-fels-feedback (egen system_writing.md,
+      activity_type="writing", egen feedback-disciplin)
+- [ ] Meningsrekonstruktion som aktivitetstyp (skippad — drag-drop-UX för dyrt
+      i förhållande till värdet just nu)
 
 Vi valde brute-force cosine över sqlite-vec eftersom korpus är litet
 (<500 chunks). När det växer förbi det byts ut.
+
+## M3.5 — Polish (löpande) 🟡
+
+- [x] Historikvy med session-detalj och radera-session
+- [x] Statistik på OLM (sessioner, engagemang, vanligaste fel, hårdaste items)
+- [x] Modellväljare i settings (gemma3:4b, qwen2.5, llama3.2)
+- [x] "Rensa all data"-knapp
+- [x] Tålig meta-extraktion (flera fallback-format)
+- [x] "Noteringar"-band per tutor-bubbla för debug av prompt-följsamhet
+- [x] Auto-växande textarea för längre skrivningar
 
 ## M4 — "Distribuerbart"
 *Mål: en lärare kan installera utan teknisk hjälp.*
 
 - [ ] Bundlad llama.cpp + modell (ingen Ollama-beroende)
 - [ ] Single .dmg / .msi / .AppImage
-- [ ] Export/import av elevens fil
-- [ ] Lärarläge med PIN: läs noteringar, se progress, men inte fulltranskript
+- [ ] Export/import av elevens fil (`.zip` med db + ev. ljud)
+- [ ] Lärarläge: aggregerad vy över flera elever (klassrum)
 
 ## Icke-mål (medvetet)
 

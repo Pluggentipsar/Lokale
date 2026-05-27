@@ -55,17 +55,24 @@ textläget oförändrat — röstknappen visar bara att binären saknas.
 
 ## Vad du kan göra just nu
 
-- **8 rollspels-scenarier** (6 A1, 2 A2): café, presentation,
-  vägbeskrivning, marknad, familj, klockslag, restaurang, helgplaner.
-- **Hint-eskalering**: tutorn vägrar översätta utan försök, eskalerar
-  från öppen fråga → kategori-hint → form-hint → worked example.
+- **14 aktiviteter** — 11 rollspel (café, presentation, vägbeskrivning,
+  marknad, familj, klockslag, hobbies, skola, restaurang, helgplaner,
+  apotek) + 3 skrivuppgifter (min dag, min stad, i helgen). 11 på A1,
+  3 på A2.
+- **Två aktivitetstyper med egna pedagogik-paket**:
+  *Rollspel* = hint-eskalerande tutorn som spelar en karaktär.
+  *Skrivning* = strikt skrivcoach som väljer 1–2 saker att jobba med.
 - **Spaced repetition** (FSRS): varje vokabord och grammatik-koncept
   schemaläggs individuellt baserat på hur sessionen gick.
 - **Open Learner Model** (`/progress`): se vad systemet tror om dig,
-  invänd med "jag kan"-knappen.
-- **Lokal RAG**: tutorn citerar curriculum-utdrag när det passar.
-- **Historik** (`/history`): bläddra alla tidigare sessioner inklusive
-  vad tutorn "noterade" per turn.
+  invänd med "jag kan"-knappen. Stats över sessioner, engagemangs-
+  fördelning, vanligaste felmönster och hårdaste items.
+- **Lokal RAG** över 8 grammatikkällor — tutorn citerar curriculum-
+  utdrag när det passar (ser/estar, artiklar, presens, gustar,
+  preteritum, reflexiverben, futuro próximo, räkneord/klockslag).
+- **Historik** (`/history`): bläddra och radera sessioner, se hela
+  transkript inklusive vad tutorn "noterade" per turn.
+- **Modellväljare**: byt Ollama-modell utan kodredigering.
 - **Röst** (om binärer finns): push-to-talk + "läs upp tutorn"-toggle.
 
 ## Designaxiom
@@ -198,7 +205,7 @@ dem.
 
 ## Status
 
-**M0, M1 klara. M2 (röst) och M3 (RAG) delvis klara.**
+**M0, M1, M3 klara. M2 (röst) scaffold-klar, behöver binärer för full
+funktionalitet. M4 (distribution) ej påbörjad.**
 
-Se [`docs/ROADMAP.md`](docs/ROADMAP.md) för exakt vad som är klart och
-vad som väntar.
+Se [`docs/ROADMAP.md`](docs/ROADMAP.md) för detaljerad status.
