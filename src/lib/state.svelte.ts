@@ -1,22 +1,12 @@
 /**
- * Global app-state med Svelte 5 runes. Hålls medvetet litet i M0 —
- * en state machine över sessionsfaser och en lista turns.
+ * Global app-state med Svelte 5 runes.
  */
 
 import type { OllamaStatus, SessionContext, Turn } from '$lib/types';
 
-export type Phase = 'init' | 'open' | 'chat' | 'close' | 'done';
+export type Phase = 'init' | 'pick' | 'open' | 'chat' | 'close' | 'done';
 
 export const MODEL_NAME = 'gemma3:4b';
-
-interface AppState {
-  phase: Phase;
-  ollama: OllamaStatus | null;
-  session: SessionContext | null;
-  pendingTutorText: string;
-  isStreaming: boolean;
-  closingQuestion: string;
-}
 
 function createState() {
   let phase = $state<Phase>('init');

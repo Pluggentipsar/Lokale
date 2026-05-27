@@ -1,0 +1,67 @@
+{
+  "id": "direcciones_a1",
+  "title": "¿Dónde está la estación?",
+  "level": "A1",
+  "estimated_minutes": 8,
+  "setting": "Du är vilse i Sevilla och frågar en lokalbo om vägen till tågstationen. En äldre vänlig kvinna stannar.",
+  "tutor_role": "vänlig lokalbo",
+  "opening_line": "¿Te puedo ayudar?",
+  "success_criteria": [
+    "Eleven använder 'dónde está' korrekt (estar för plats)",
+    "Eleven förstår och svarar på minst en vägbeskrivning (a la derecha, a la izquierda, recto)",
+    "Eleven tackar med en hel mening"
+  ],
+  "target_items": [
+    {
+      "ref": "grammar:estar_for_location_a1",
+      "note": "estar används för plats: '¿Dónde está la estación?' (vanligt fel: använda ser)"
+    },
+    {
+      "ref": "pattern:asking_directions_a1",
+      "examples": [
+        "¿Dónde está ...?",
+        "¿Está lejos?",
+        "¿Cómo se va a ...?"
+      ]
+    },
+    {
+      "ref": "vocab:directions_a1",
+      "lemmas": [
+        "derecha",
+        "izquierda",
+        "recto",
+        "cerca",
+        "lejos",
+        "calle",
+        "plaza",
+        "estación"
+      ]
+    }
+  ],
+  "stretch_items": [
+    {
+      "ref": "grammar:imperative_basic_a1",
+      "trigger": "om eleven hänger med när tutorn säger 'sigue recto'"
+    }
+  ],
+  "branches": [
+    {
+      "when": "eleven använder 'ser' istället för 'estar' om platsen",
+      "barista_followups": [
+        "*(Pausa rolig — peka mjukt: vi använder estar när vi talar om var något är.)*"
+      ]
+    },
+    {
+      "when": "eleven förstår första riktningen",
+      "barista_followups": [
+        "Y después, en la primera calle, a la izquierda.",
+        "¿Lo has entendido?"
+      ]
+    }
+  ],
+  "exit_signals": [
+    "eleven har bekräftat att hen förstått vägen",
+    "eleven tackar"
+  ],
+  "notes_for_tutor": "Tala långsamt. Använd gärna gester (i parentes som *kursiv*). Om eleven blandar ser/estar för plats — detta är ett A1-klassiskt fel som ska coachas, inte bara accepteras. Bryt karaktären kort med en *kursiv*-paus om det behövs."
+}

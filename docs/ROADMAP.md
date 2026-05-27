@@ -20,15 +20,17 @@ feedback. Inga ljud, ingen SRS, ingen OLM.*
 Frågor M0 ska besvara: *känns interaktionen pedagogiskt rätt? vägrar
 modellen översätta utan ansträngning? känns hint-eskaleringen naturlig?*
 
-## M1 — "Den minns mig"
+## M1 — "Den minns mig" ✅
 *Mål: appen kommer ihåg mellan sessioner och anpassar sig.*
 
-- [ ] `notes`-generering vid sessionsslut (LLM skriver kort observation)
-- [ ] Items-modellen: vokab + grammatik-koncept tagas på scenarion
-- [ ] FSRS-state per item, due-beräkning
-- [ ] Due items injiceras i prompten
-- [ ] Open Learner Model-vy: lista över items, mastery-prickar, senaste notes
-- [ ] Eleven kan klicka "jag kan det här redan" på en item → påverkar FSRS
+- [x] `notes`-generering vid sessionsslut (LLM skriver kort observation)
+- [x] Items-modellen: vokab + grammatik-koncept tagas på scenarion
+- [x] FSRS-state per item, due-beräkning (via ts-fsrs)
+- [x] Due items injiceras i prompten
+- [x] Open Learner Model-vy: lista över items grupperade på state, mastery-prickar, senaste notes
+- [x] Eleven kan klicka "jag kan det här redan" på en item → påverkar FSRS
+- [x] Scenariot väljs ur en lista (3 A1-scenarier seedade)
+- [x] Inställningssida för namn/L1/nivå
 
 Frågor M1 ska besvara: *känns det att modellen lärt sig något om eleven?
 är OLM:en begriplig för en 14-åring?*

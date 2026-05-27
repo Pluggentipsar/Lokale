@@ -7,7 +7,7 @@
  * båda lagren.
  */
 
-import type { Scenario } from '$lib/types';
+import type { ItemWithState, NoteRecord, Scenario } from '$lib/types';
 
 import systemTutor from '../../../prompts/system_tutor.md?raw';
 import feedbackPattern from '../../../prompts/feedback_pattern.md?raw';
@@ -17,12 +17,30 @@ export interface PromptInputs {
   l1: string;
   targetLevel: string;
   goal: string;
-  dueItems: string[];     // M0: tom array tills M1
-  recentNotes: string[];  // M0: tom array tills M1
+  sessionItems: ItemWithState[];
+  recentNotes: NoteRecord[];
 }
 
 function fillVariables(text: string, vars: Record<string, string>): string {
   return text.replace(/\{(\w+)\}/g, (_, key) => vars[key] ?? `{${key}}`);
+}
+
+function describeItem(iws: ItemWithState): string {
+  const ref = (iws.item.payload['ref'] as string) ?? `item:${iws.item.id}`;
+  const state = iws.state.state;
+  const reps = iws.state.reps;
+  const lapses = iws.state.lapses;
+  let detail = '';
+  if (iws.item.item_type === 'vocab') {
+    detail = ` "${iws.item.payload['lemma']}"`;
+  } else if (iws.item.item_type === 'grammar' && iws.item.payload['note']) {
+    detail = ` — ${iws.item.payload['note']}`;
+  }
+  const stats =
+    state === 'new'
+      ? ' (ny)'
+      : ` (${state}, ${reps} reps${lapses ? `, ${lapses} lapses` : ''})`;
+  return `  - ${ref}${detail}${stats}`;
 }
 
 export function buildSystemPrompt(inputs: PromptInputs): string {
@@ -31,15 +49,18 @@ export function buildSystemPrompt(inputs: PromptInputs): string {
     target_level: inputs.targetLevel
   });
 
-  const dueBlock =
-    inputs.dueItems.length === 0
+  const itemsBlock =
+    inputs.sessionItems.length === 0
       ? '(inga ackumulerade än — detta är en tidig session)'
-      : inputs.dueItems.map((s) => `  - ${s}`).join('\n');
+      : inputs.sessionItems.map(describeItem).join('\n');
 
   const notesBlock =
     inputs.recentNotes.length === 0
       ? '(inga än)'
-      : inputs.recentNotes.map((s) => `  - ${s}`).join('\n');
+      : inputs.recentNotes
+          .slice(0, 5)
+          .map((n) => `  - [${n.created_at.slice(0, 10)}] ${n.body}`)
+          .join('\n');
 
   const runtime = `
 ---
@@ -54,16 +75,14 @@ export function buildSystemPrompt(inputs: PromptInputs): string {
 - exit-signaler: ${inputs.scenario.exit_signals.join('; ')}
 - pedagogisk anmärkning: ${inputs.scenario.notes_for_tutor}
 
-## TARGET ITEMS DENNA SESSION
-${inputs.scenario.target_items.map((t) => `  - ${t.ref}${t.lemmas ? ` (${t.lemmas.join(', ')})` : ''}`).join('\n')}
+## ITEMS I FOKUS DENNA SESSION
+Returnera dessa refs i \`target_items\` när du arbetar med dem.
+${itemsBlock}
 
 ## ELEVENS MÅL FÖR SESSIONEN
 "${inputs.goal}"
 
-## DUE ITEMS (från spaced repetition)
-${dueBlock}
-
-## SENASTE NOTERINGAR OM ELEVEN
+## SENASTE NOTERINGAR OM ELEVEN (kronologiskt, nyast först)
 ${notesBlock}
 ---
 `.trim();
@@ -71,13 +90,13 @@ ${notesBlock}
   return [persona, '\n\n---\n# FEEDBACK-MÖNSTER\n', feedbackPattern, '\n\n', runtime].join('');
 }
 
-export function buildClosingReflectionPrompt(transcript: string): string {
+export function buildClosingReflectionPrompt(transcript: string, l1: string): string {
   return `Du har just avslutat en spansklektion med en elev.
 
 Ställ EN reflektionsfråga som passar just denna session. Välj utifrån vad
 som faktiskt hände i transkriptet nedan. Frågan ska:
 - vara kort (max två meningar)
-- vara på ${'sv'} (elevens modersmål) så att eleven svarar fritt
+- vara på ${l1} (elevens modersmål) så att eleven svarar fritt
 - inte vara generisk ("vad lärde du dig?") utan kopplad till något specifikt
 
 Svara med ENDAST frågan, ingen inramning.

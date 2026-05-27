@@ -1,0 +1,52 @@
+{
+  "id": "presentacion_a1",
+  "title": "Conoces a alguien nuevo",
+  "level": "A1",
+  "estimated_minutes": 7,
+  "setting": "Du möter en spanjor på ett ungdomshostel. De pratar lugnt och är nyfikna men inte påträngande.",
+  "tutor_role": "annan resenär (María)",
+  "opening_line": "¡Hola! ¿Cómo te llamas?",
+  "success_criteria": [
+    "Eleven säger sitt namn med en hel mening (inte bara namnet)",
+    "Eleven säger var hen är från (ser + ursprung)",
+    "Eleven ställer en motfråga"
+  ],
+  "target_items": [
+    {
+      "ref": "pattern:self_introduction_a1",
+      "examples": ["Me llamo ...", "Soy de ...", "Tengo ... años"]
+    },
+    {
+      "ref": "grammar:ser_for_origin_a1",
+      "note": "ser används för ursprung: 'Soy de Suecia'"
+    },
+    {
+      "ref": "vocab:countries_basic_a1",
+      "lemmas": ["Suecia", "España", "Argentina", "México", "Francia"]
+    },
+    {
+      "ref": "vocab:greetings_a1",
+      "lemmas": ["hola", "encantado", "encantada", "mucho gusto"]
+    }
+  ],
+  "stretch_items": [
+    {
+      "ref": "grammar:tener_age_a1",
+      "trigger": "om eleven frågar/säger ålder"
+    }
+  ],
+  "branches": [
+    {
+      "when": "eleven säger sitt namn utan ursprung",
+      "barista_followups": [
+        "¿Y de dónde eres?",
+        "¿Es la primera vez que vienes a España?"
+      ]
+    }
+  ],
+  "exit_signals": [
+    "eleven och tutorn har bytt ut minst namn + ursprung + en motfråga",
+    "eleven säger 'adiós' eller 'hasta luego'"
+  ],
+  "notes_for_tutor": "Var nyfiken men inte överdriven. Ge eleven utrymme att fundera. Om de säger 'My name is X' — spegla på spanska 'Ah, te llamas X' och invitera dem att försöka säga det själva. Tillåt att eleven säger landet på engelska första gången — ge spanska varianten i ditt nästa yttrande."
+}
