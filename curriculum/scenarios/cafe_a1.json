@@ -1,0 +1,57 @@
+{
+  "id": "cafe_a1",
+  "title": "En un café de Madrid",
+  "level": "A1",
+  "estimated_minutes": 8,
+  "setting": "Un café tranquilo por la mañana. Un barista amable.",
+  "tutor_role": "barista",
+  "opening_line": "¡Buenos días! ¿Qué te pongo?",
+  "success_criteria": [
+    "Eleven beställer minst en dryck med fullständig mening (artikel + substantiv + ev. modifiering)",
+    "Eleven använder 'por favor' eller 'gracias' minst en gång",
+    "Eleven hanterar en uppföljningsfråga (storlek, mjölk, sockerart)"
+  ],
+  "target_items": [
+    {
+      "ref": "vocab:cafe_drinks_a1",
+      "lemmas": ["café", "té", "agua", "zumo", "leche", "azúcar"]
+    },
+    {
+      "ref": "grammar:articles_indef_a1",
+      "note": "un / una framför substantiv"
+    },
+    {
+      "ref": "pattern:polite_request_a1",
+      "examples": ["Quiero ... por favor", "Me pones ..., por favor"]
+    }
+  ],
+  "stretch_items": [
+    {
+      "ref": "grammar:ser_estar_basic",
+      "trigger": "om eleven frågar var något är (¿dónde está...?)"
+    }
+  ],
+  "branches": [
+    {
+      "when": "eleven beställer kaffe",
+      "barista_followups": [
+        "¿Solo o con leche?",
+        "¿Grande o pequeño?",
+        "¿Con azúcar?"
+      ]
+    },
+    {
+      "when": "eleven beställer te",
+      "barista_followups": [
+        "¿De qué? Tenemos verde, negro y manzanilla.",
+        "¿Con limón?"
+      ]
+    }
+  ],
+  "exit_signals": [
+    "eleven betalar eller säger 'gracias, adiós'",
+    "eleven har gjort minst 4 lyckade utbyten",
+    "tidsgräns nådd"
+  ],
+  "notes_for_tutor": "Var lugn, le i tonen, prata långsamt. Detta är ofta elevens första riktiga konversation. Acceptera *un café* utan artikel-form-feedback första gången — det är överkurs här. Om eleven säger engelska ord, spegla på spanska ('¿un coffee? — un café, sí') och gå vidare utan att skämma."
+}

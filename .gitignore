@@ -1,0 +1,37 @@
+# Node
+node_modules/
+.svelte-kit/
+build/
+dist/
+.vite/
+
+# Tauri / Rust
+src-tauri/target/
+src-tauri/Cargo.lock
+src-tauri/binaries/
+
+# Lokal data — får aldrig commits
+data/
+*.sqlite
+*.sqlite-journal
+*.sqlite-wal
+*.sqlite-shm
+
+# Modeller (för stora och licensbärande)
+models/
+*.gguf
+*.bin
+*.onnx
+
+# Ljud-cache
+audio_cache/
+*.wav.tmp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp

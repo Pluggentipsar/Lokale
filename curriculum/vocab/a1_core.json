@@ -1,0 +1,20 @@
+{
+  "_about": "Frö-vokabulär A1. Importeras vid första körning till items-tabellen. Detta är inte en uttömmande lista — bara tillräckligt för att seeda de första scenarierna.",
+  "_level": "A1",
+  "items": [
+    {"lemma": "café",   "pos": "n.m", "gloss_sv": "kaffe",      "tags": ["cafe","drinks"]},
+    {"lemma": "té",     "pos": "n.m", "gloss_sv": "te",         "tags": ["cafe","drinks"]},
+    {"lemma": "agua",   "pos": "n.f", "gloss_sv": "vatten",     "tags": ["cafe","drinks"]},
+    {"lemma": "zumo",   "pos": "n.m", "gloss_sv": "juice",      "tags": ["cafe","drinks"]},
+    {"lemma": "leche",  "pos": "n.f", "gloss_sv": "mjölk",      "tags": ["cafe","drinks"]},
+    {"lemma": "azúcar", "pos": "n.m", "gloss_sv": "socker",     "tags": ["cafe"]},
+    {"lemma": "por favor", "pos": "phrase", "gloss_sv": "tack (vid begäran)", "tags": ["politeness"]},
+    {"lemma": "gracias",   "pos": "phrase", "gloss_sv": "tack",                 "tags": ["politeness"]},
+    {"lemma": "hola",      "pos": "phrase", "gloss_sv": "hej",                  "tags": ["greetings"]},
+    {"lemma": "adiós",     "pos": "phrase", "gloss_sv": "hej då",               "tags": ["greetings"]},
+    {"lemma": "buenos días", "pos": "phrase", "gloss_sv": "god morgon",        "tags": ["greetings"]},
+    {"lemma": "querer",    "pos": "v",       "gloss_sv": "vilja",              "tags": ["common-verbs"]},
+    {"lemma": "ser",       "pos": "v",       "gloss_sv": "vara (egenskap)",    "tags": ["common-verbs","copula"]},
+    {"lemma": "estar",     "pos": "v",       "gloss_sv": "vara (tillstånd/plats)", "tags": ["common-verbs","copula"]}
+  ]
+}
