@@ -526,6 +526,97 @@ export async function wipeAllData(): Promise<void> {
   await conn.execute(`DELETE FROM settings`);
 }
 
+// ---------------------------------------------------------------------
+// Aggregat / insikter
+// ---------------------------------------------------------------------
+
+export interface ProgressStats {
+  totalSessions: number;
+  sessionsThisWeek: number;
+  totalTurns: number;
+  averageEngagement: { passive: number; active: number; constructive: number };
+  topObservedErrors: Array<{ tag: string; count: number }>;
+  toughestItems: Array<{ ref: string; lemma: string | null; lapses: number; reps: number }>;
+}
+
+export async function getProgressStats(): Promise<ProgressStats> {
+  const conn = await db();
+
+  const sessions = await conn.select<{ c: number }[]>(
+    `SELECT COUNT(*) AS c FROM sessions`
+  );
+  const sessionsWeek = await conn.select<{ c: number }[]>(
+    `SELECT COUNT(*) AS c FROM sessions WHERE started_at >= datetime('now', '-7 days')`
+  );
+  const turns = await conn.select<{ c: number }[]>(
+    `SELECT COUNT(*) AS c FROM encounters`
+  );
+
+  const engRows = await conn.select<{ engagement: string; c: number }[]>(
+    `SELECT engagement, COUNT(*) AS c FROM encounters
+     WHERE engagement IS NOT NULL AND speaker = 'tutor'
+     GROUP BY engagement`
+  );
+  const engagement = { passive: 0, active: 0, constructive: 0 };
+  for (const r of engRows) {
+    if (r.engagement === 'passive') engagement.passive = r.c;
+    if (r.engagement === 'active') engagement.active = r.c;
+    if (r.engagement === 'constructive') engagement.constructive = r.c;
+  }
+
+  // Topp 5 observed_errors (flatten ur JSON-array per encounter).
+  const errorRows = await conn.select<{ observed_errors_json: string }[]>(
+    `SELECT observed_errors_json FROM encounters
+     WHERE observed_errors_json IS NOT NULL`
+  );
+  const errorCounts = new Map<string, number>();
+  for (const r of errorRows) {
+    try {
+      const arr = JSON.parse(r.observed_errors_json) as string[];
+      for (const tag of arr) {
+        errorCounts.set(tag, (errorCounts.get(tag) ?? 0) + 1);
+      }
+    } catch {
+      /* skip */
+    }
+  }
+  const topObservedErrors = [...errorCounts.entries()]
+    .map(([tag, count]) => ({ tag, count }))
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 5);
+
+  // Items med flest lapses (tuffaste att fastna i).
+  const tough = await conn.select<{
+    payload_json: string;
+    lapses: number;
+    reps: number;
+  }[]>(
+    `SELECT i.payload_json, rs.lapses, rs.reps
+       FROM items i JOIN review_state rs ON rs.item_id = i.id
+      WHERE rs.lapses > 0
+      ORDER BY rs.lapses DESC, rs.reps DESC
+      LIMIT 5`
+  );
+  const toughestItems = tough.map((r) => {
+    const p = JSON.parse(r.payload_json) as { ref?: string; lemma?: string };
+    return {
+      ref: p.ref ?? '',
+      lemma: p.lemma ?? null,
+      lapses: r.lapses,
+      reps: r.reps
+    };
+  });
+
+  return {
+    totalSessions: sessions[0]?.c ?? 0,
+    sessionsThisWeek: sessionsWeek[0]?.c ?? 0,
+    totalTurns: turns[0]?.c ?? 0,
+    averageEngagement: engagement,
+    topObservedErrors,
+    toughestItems
+  };
+}
+
 export async function listSummaryNotes(limit: number): Promise<NoteRecord[]> {
   const conn = await db();
   const rows = await conn.select<NoteRow[]>(

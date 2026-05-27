@@ -1,11 +1,18 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { listAllItemsWithState, listSummaryNotes, updateReviewState } from '$lib/db';
+  import {
+    listAllItemsWithState,
+    listSummaryNotes,
+    updateReviewState,
+    getProgressStats,
+    type ProgressStats
+  } from '$lib/db';
   import { markKnown } from '$lib/pedagogy/fsrs';
   import type { ItemWithState, NoteRecord } from '$lib/types';
 
   let items = $state<ItemWithState[]>([]);
   let notes = $state<NoteRecord[]>([]);
+  let stats = $state<ProgressStats | null>(null);
   let loading = $state(true);
 
   onMount(async () => {
@@ -14,11 +21,25 @@
 
   async function load() {
     loading = true;
-    [items, notes] = await Promise.all([
+    [items, notes, stats] = await Promise.all([
       listAllItemsWithState(),
-      listSummaryNotes(20)
+      listSummaryNotes(20),
+      getProgressStats()
     ]);
     loading = false;
+  }
+
+  const engagementTotal = $derived(
+    stats
+      ? stats.averageEngagement.passive +
+          stats.averageEngagement.active +
+          stats.averageEngagement.constructive
+      : 0
+  );
+
+  function pct(n: number, total: number): string {
+    if (total === 0) return '0%';
+    return Math.round((n / total) * 100) + '%';
   }
 
   type Bucket = 'new' | 'learning' | 'review' | 'relearning';
@@ -91,6 +112,66 @@
   {#if loading}
     <p class="text-(--color-muted)">Laddar...</p>
   {:else}
+    <!-- Stats -->
+    {#if stats && stats.totalSessions > 0}
+      <section class="grid grid-cols-3 gap-3">
+        <div class="p-4 bg-(--color-warm) rounded-xl">
+          <div class="text-xs text-(--color-muted) uppercase tracking-wider mb-1">Sessioner totalt</div>
+          <div class="font-serif text-2xl">{stats.totalSessions}</div>
+          {#if stats.sessionsThisWeek > 0}
+            <div class="text-xs text-(--color-muted) mt-1">{stats.sessionsThisWeek} senaste 7 dagarna</div>
+          {/if}
+        </div>
+        <div class="p-4 bg-(--color-warm) rounded-xl">
+          <div class="text-xs text-(--color-muted) uppercase tracking-wider mb-1">Turns</div>
+          <div class="font-serif text-2xl">{stats.totalTurns}</div>
+        </div>
+        <div class="p-4 bg-(--color-warm) rounded-xl">
+          <div class="text-xs text-(--color-muted) uppercase tracking-wider mb-1">Engagemang</div>
+          {#if engagementTotal > 0}
+            <div class="text-sm space-y-0.5 mt-1">
+              <div class="flex justify-between"><span>konstruktivt</span><span class="font-mono">{pct(stats.averageEngagement.constructive, engagementTotal)}</span></div>
+              <div class="flex justify-between"><span>aktivt</span><span class="font-mono">{pct(stats.averageEngagement.active, engagementTotal)}</span></div>
+              <div class="flex justify-between text-(--color-muted)"><span>passivt</span><span class="font-mono">{pct(stats.averageEngagement.passive, engagementTotal)}</span></div>
+            </div>
+          {:else}
+            <div class="text-sm text-(--color-muted) mt-1">ingen data än</div>
+          {/if}
+        </div>
+      </section>
+
+      {#if stats.topObservedErrors.length > 0 || stats.toughestItems.length > 0}
+        <section class="grid sm:grid-cols-2 gap-4">
+          {#if stats.topObservedErrors.length > 0}
+            <div class="p-4 rounded-xl border border-(--color-muted)/15">
+              <h3 class="font-serif text-base mb-3">Vanligaste felmönster</h3>
+              <ul class="space-y-1 text-sm">
+                {#each stats.topObservedErrors as e}
+                  <li class="flex justify-between font-mono">
+                    <span class="truncate">{e.tag}</span>
+                    <span class="text-(--color-muted)">{e.count}×</span>
+                  </li>
+                {/each}
+              </ul>
+            </div>
+          {/if}
+          {#if stats.toughestItems.length > 0}
+            <div class="p-4 rounded-xl border border-(--color-muted)/15">
+              <h3 class="font-serif text-base mb-3">Hårdast nötter</h3>
+              <ul class="space-y-1 text-sm">
+                {#each stats.toughestItems as t}
+                  <li class="flex justify-between">
+                    <span class="truncate">{t.lemma ?? t.ref}</span>
+                    <span class="text-(--color-muted) font-mono">{t.lapses} lapses</span>
+                  </li>
+                {/each}
+              </ul>
+            </div>
+          {/if}
+        </section>
+      {/if}
+    {/if}
+
     <!-- Items per state -->
     {#each ['review', 'learning', 'relearning', 'new'] as bucket}
       {@const list = grouped[bucket as 'review' | 'learning' | 'relearning' | 'new']}
