@@ -7,8 +7,9 @@ dist/
 
 # Tauri / Rust
 src-tauri/target/
-src-tauri/Cargo.lock
+src-tauri/gen/
 src-tauri/binaries/
+# Cargo.lock committeras (det är en applikation, inte ett bibliotek)
 
 # Lokal data — får aldrig commits
 data/

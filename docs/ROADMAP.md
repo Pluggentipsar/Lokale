@@ -3,18 +3,19 @@
 Milstolpar definierade efter vad eleven kan *göra*, inte efter teknisk
 implementation. Varje milstolpe ska vara körbar end-to-end.
 
-## M0 — "Hello, Compañero"
+## M0 — "Hello, Compañero" ✅
 *Mål: en elev kan ha ett textsamtal i ett rollspel och får hint-eskalerande
 feedback. Inga ljud, ingen SRS, ingen OLM.*
 
-- [ ] Tauri-projekt + Svelte-skelett uppe
-- [ ] SQLite via `tauri-plugin-sql`, `0001_initial.sql` körs
-- [ ] Ollama-hälsokoll vid uppstart, instruktion om saknas
-- [ ] Hårdkodat `cafe_a1.json`-scenario laddat
-- [ ] Chat-UI: en pratbubbla i taget, push-to-send
-- [ ] System-prompt + feedback-pattern injiceras
-- [ ] Varje turn loggas i `encounters`
-- [ ] Sessionsstart frågar "Vad vill du öva idag?", slut "Vad lärde du dig?"
+- [x] Tauri-projekt + Svelte-skelett uppe
+- [x] SQLite via `tauri-plugin-sql`, `0001_initial.sql` körs
+- [x] Ollama-hälsokoll vid uppstart, instruktion om saknas
+- [x] Hårdkodat `cafe_a1.json`-scenario laddat
+- [x] Chat-UI: en pratbubbla i taget, push-to-send (med streaming)
+- [x] System-prompt + feedback-pattern injiceras
+- [x] Varje turn loggas i `encounters` (med strukturerad meta för tutor-turns)
+- [x] Sessionsstart frågar mål + självskattning
+- [x] Sessionsslut: LLM-genererad reflektionsfråga + lärartidsbok-note
 
 Frågor M0 ska besvara: *känns interaktionen pedagogiskt rätt? vägrar
 modellen översätta utan ansträngning? känns hint-eskaleringen naturlig?*

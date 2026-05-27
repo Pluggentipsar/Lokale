@@ -80,21 +80,45 @@ Lokale/
 └── .gitignore
 ```
 
-## Köra (när M0 är klart)
+## Köra
 
-```
-# förutsättning: Ollama installerat och kört (`ollama serve`)
+Förutsättningar:
+- Node 22+, Rust stable, npm
+- [Ollama](https://ollama.com) installerat och igång
+- Linux-byggberoenden (bara på Linux):
+  `apt install libgtk-3-dev libwebkit2gtk-4.1-dev libayatana-appindicator3-dev librsvg2-dev libssl-dev`
+
+```bash
+# 1. Hämta modellen
 ollama pull gemma3:4b
-ollama pull nomic-embed-text
 
+# 2. Installera frontend-deps
 npm install
-npm run tauri dev
+
+# 3. Starta appen i dev-läge (Tauri öppnar ett fönster)
+npm run tauri:dev
 ```
 
-Skoldistribution (M2+): single `.dmg`/`.msi`/`.AppImage` med bundlad
-llama.cpp + modell + whisper + piper. Inget extra att installera.
+Första körningen tar några minuter (Rust-kompilering). Efter det är
+varmstart ~5 sek.
+
+### Bara frontend (utan Tauri-fönstret)
+
+Om du vill iterera snabbt på UI utan att starta Tauri:
+```bash
+npm run dev
+```
+Öppna `http://localhost:1420`. SQLite kommer inte fungera utan Tauri,
+men UI:t laddar.
 
 ## Status
 
-Pre-M0. Detta repo innehåller hittills bara skiss-dokument, schema,
-prompts och exempel-curriculum.
+**M0 klar.** En elev kan starta en session, ange mål + självskattning,
+ha ett textsamtal med en lokal modell i ett café-rollspel, avsluta med
+en reflektionsfråga som modellen formulerar utifrån just denna session,
+och få sin progress sparad i SQLite. Hint-eskalering, "vägrar översätta
+utan försök" och strukturerad metadata-extraktion fungerar.
+
+Saknas (kommer i M1+): OLM-vy, FSRS-schemaläggning, fler scenarion,
+röst, bundlad llama.cpp för installation utan Ollama. Se
+[`docs/ROADMAP.md`](docs/ROADMAP.md).
