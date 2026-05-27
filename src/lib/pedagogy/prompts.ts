@@ -8,6 +8,7 @@
  */
 
 import type { ItemWithState, NoteRecord, Scenario } from '$lib/types';
+import type { RetrievedChunk } from '$lib/rag';
 
 import systemTutor from '../../../prompts/system_tutor.md?raw';
 import feedbackPattern from '../../../prompts/feedback_pattern.md?raw';
@@ -19,6 +20,7 @@ export interface PromptInputs {
   goal: string;
   sessionItems: ItemWithState[];
   recentNotes: NoteRecord[];
+  references?: RetrievedChunk[];
 }
 
 function fillVariables(text: string, vars: Record<string, string>): string {
@@ -62,6 +64,14 @@ export function buildSystemPrompt(inputs: PromptInputs): string {
           .map((n) => `  - [${n.created_at.slice(0, 10)}] ${n.body}`)
           .join('\n');
 
+  const referencesBlock =
+    !inputs.references || inputs.references.length === 0
+      ? ''
+      : `
+
+## REFERENS FRÅN CURRICULUM (faktautdrag — citera bara om relevant)
+${inputs.references.map((r) => `  > ${r.content}  \n    [källa: ${r.source_path}, similarity ${r.similarity.toFixed(2)}]`).join('\n')}`;
+
   const runtime = `
 ---
 # RUNTIME-KONTEXT
@@ -83,7 +93,7 @@ ${itemsBlock}
 "${inputs.goal}"
 
 ## SENASTE NOTERINGAR OM ELEVEN (kronologiskt, nyast först)
-${notesBlock}
+${notesBlock}${referencesBlock}
 ---
 `.trim();
 

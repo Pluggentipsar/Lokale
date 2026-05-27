@@ -25,6 +25,7 @@
     type ProfileRecord
   } from '$lib/db';
   import { deriveItemsForScenario, listScenarios } from '$lib/curriculum';
+  import { buildIndex, retrieve } from '$lib/rag';
 
   import OllamaGate from '$lib/components/OllamaGate.svelte';
   import SessionOpen from '$lib/components/SessionOpen.svelte';
@@ -45,10 +46,25 @@
     await runOllamaCheck();
   });
 
+  let indexing = $state(false);
+  let indexProgress = $state<{ current: number; total: number } | null>(null);
+
   async function runOllamaCheck() {
     app.ollama = await checkOllama(MODEL_NAME);
     if (app.ollama.ok) {
       app.phase = 'pick';
+      // Kick off curriculum-indexering i bakgrunden. Första sessionen
+      // saknar då eventuellt RAG-referenser; nästa har dem. Misslyckas
+      // tyst (t.ex. om nomic-embed-text saknas).
+      indexing = true;
+      buildIndex((current, total) => {
+        indexProgress = { current, total };
+      })
+        .catch((err) => console.warn('Curriculum index build failed:', err))
+        .finally(() => {
+          indexing = false;
+          indexProgress = null;
+        });
     }
   }
 
@@ -166,13 +182,25 @@
     });
 
     const recentNotes = await listRecentNotes(5);
+
+    // RAG: bygg en query från senaste student-yttrandet + scenariot, ta top-3.
+    // Misslyckas tyst — RAG är bonus.
+    let references: Awaited<ReturnType<typeof retrieve>> = [];
+    try {
+      const query = `${session.scenario.setting} ${text}`;
+      references = await retrieve(query, 3);
+    } catch (err) {
+      console.warn('RAG retrieve failed:', err);
+    }
+
     const systemPrompt = buildSystemPrompt({
       scenario: session.scenario,
       l1: profile.l1,
       targetLevel: profile.targetLevel,
       goal: session.goal,
       sessionItems: session.sessionItems,
-      recentNotes
+      recentNotes,
+      references
     });
 
     const messages = assembleChatMessages(session.turns, systemPrompt);
@@ -283,6 +311,13 @@
   <OllamaGate status={app.ollama} onRetry={runOllamaCheck} />
 {:else if app.phase === 'pick'}
   <ScenarioPicker {scenarios} onSelect={onScenarioPick} />
+  {#if indexing}
+    <p class="text-center text-xs text-(--color-muted) mt-4">
+      Bygger curriculum-index{indexProgress
+        ? ` (${indexProgress.current}/${indexProgress.total})`
+        : '...'}
+    </p>
+  {/if}
 {:else if app.phase === 'open' && scenario}
   <SessionOpen {scenario} onStart={onSessionStart} />
 {:else if app.phase === 'chat' && app.session}

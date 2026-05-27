@@ -89,8 +89,9 @@ Förutsättningar:
   `apt install libgtk-3-dev libwebkit2gtk-4.1-dev libayatana-appindicator3-dev librsvg2-dev libssl-dev`
 
 ```bash
-# 1. Hämta modellen
-ollama pull gemma3:4b
+# 1. Hämta modellerna
+ollama pull gemma3:4b           # chat-modellen (krävs)
+ollama pull nomic-embed-text    # för RAG (rekommenderas)
 
 # 2. Installera frontend-deps
 npm install
@@ -98,6 +99,9 @@ npm install
 # 3. Starta appen i dev-läge (Tauri öppnar ett fönster)
 npm run tauri:dev
 ```
+
+Utan `nomic-embed-text` fungerar appen ändå — RAG-blocket utelämnas tyst
+ur prompten.
 
 Första körningen tar några minuter (Rust-kompilering). Efter det är
 varmstart ~5 sek.

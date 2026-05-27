@@ -46,14 +46,19 @@ Frågor M1 ska besvara: *känns det att modellen lärt sig något om eleven?
 Frågor M2 ska besvara: *hur ofta gissar Whisper fel på elevens spanska?
 hjälper Piper-rösten eller distraherar den?*
 
-## M3 — "Bredd och RAG"
+## M3 — "Bredd och RAG" 🟡 (delvis)
 *Mål: fler scenarier, riktig RAG.*
 
-- [ ] 10+ scenarion (A1 + A2)
-- [ ] Curriculum-embeddings i `sqlite-vec`
-- [ ] Top-K-retrieval injiceras i prompten
+- [x] Lokal embedding via Ollama (`nomic-embed-text`)
+- [x] Curriculum-chunkning + indexering (brute-force cosine, ej sqlite-vec)
+- [x] Top-K-retrieval injiceras i prompten som REFERENS-block
+- [x] Idempotent index-bygge (hash-baserad change detection)
+- [ ] 10+ scenarion (A1 + A2) — har 3, behöver 7 till
 - [ ] Meningsrekonstruktion som aktivitetstyp
 - [ ] Fri skrivning med 1–2-fels-feedback
+
+Vi valde brute-force cosine över sqlite-vec eftersom korpus är litet
+(<500 chunks). När det växer förbi det byts ut.
 
 ## M4 — "Distribuerbart"
 *Mål: en lärare kan installera utan teknisk hjälp.*
